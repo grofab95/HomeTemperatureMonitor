@@ -6,4 +6,15 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Akka" Version="1.4.32" />
+      <PackageReference Include="Akka.DependencyInjection" Version="1.4.32" />
+      <PackageReference Include="Akka.Logger.Serilog" Version="1.4.26" />
+      <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.1.8" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\HTM.Infrastructure\HTM.Infrastructure.csproj" />
+    </ItemGroup>
+
 </Project>
