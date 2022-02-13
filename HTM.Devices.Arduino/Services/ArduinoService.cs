@@ -1,7 +1,8 @@
 ﻿using HTM.Devices.Arduino.Configurations;
-using HTM.Infrastructure.Adapters;
+using HTM.Infrastructure.Devices.Adapters;
 using HTM.Infrastructure.Exceptions;
 using Microsoft.Extensions.Options;
+using Serilog;
 using System.IO.Ports;
 using Timer = System.Timers.Timer;
 
@@ -22,8 +23,9 @@ public class ArduinoService : IDisposable, ISerialPortDevice
     {
         _serialPort = new SerialPort(arduinoOptions.Value.PortName, arduinoOptions.Value.PortBaudRate);
         _serialPort.DataReceived += OnDataReceived;
-        //_timer = new Timer(CheckConnectionHealthDelayInMs);
-        //_timer.Elapsed += (_,_) => CheckConnectionHealth();
+        _timer = new Timer(CheckConnectionHealthDelayInMs);
+        _timer.Elapsed += (_,_) => CheckConnectionHealth();
+        _timer.Start();
     }
 
     private void CheckConnectionHealth()
@@ -39,6 +41,7 @@ public class ArduinoService : IDisposable, ISerialPortDevice
         }
         
         _isConnected = _serialPort.IsOpen;
+        
         ConnectionChanged?.Invoke(this, _serialPort.IsOpen);
     }
     
@@ -48,15 +51,15 @@ public class ArduinoService : IDisposable, ISerialPortDevice
         {
             _serialPort.Open();
         }
-        catch (Exception ex)
+        catch
         {
-            
+            // ignored
         }
     }
 
     private void OnDataReceived(object sender, SerialDataReceivedEventArgs args)
     {
-        var message = _serialPort.ReadExisting();
+        var message = _serialPort.ReadLine();
         if (string.IsNullOrEmpty(message))
         {
             return;
@@ -65,30 +68,23 @@ public class ArduinoService : IDisposable, ISerialPortDevice
         OnMessageReceived?.Invoke(this, message);
     }
     
-    public Task Initialize()
-    {
-        _serialPort.Open();
-        
-        ThrowIfDeviceIsOffline();
-        
-        //_timer.Start();
+    public Task Initialize() => Task.CompletedTask;
 
-        return Task.CompletedTask;
-    }
-
-    public void SendMessage(string message)
+    public void SendMessage(string? message)
     {
-        ThrowIfDeviceIsOffline();
+        if (string.IsNullOrEmpty(message))
+        {
+            throw new ArgumentNullException(message);
+        }
         
-        _serialPort.Write(message);
-    }
-
-    private void ThrowIfDeviceIsOffline()
-    {
         if (!_serialPort.IsOpen)
         {
-            throw new DeviceNotConnectedException();
+            throw new DeviceDisconnectedException();
         }
+        
+        Log.Debug("{SendMessage} | Message={Message}", nameof(SendMessage), message);
+        
+        _serialPort.Write(message);
     }
     
     public void Dispose()

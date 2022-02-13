@@ -1,66 +1,21 @@
-﻿using HTM.Core.Actors;
-using HTM.Infrastructure;
-using HTM.Infrastructure.Adapters;
-using HTM.Infrastructure.Devices.Enums;
-using HTM.Infrastructure.Devices.Messages.Events;
-using HTM.Infrastructure.Devices.Messages.Requests;
-using Akka.Actor;
+﻿using Akka.Actor;
+using Akka.DependencyInjection;
 using Akka.Event;
-using System.Runtime.CompilerServices;
+using HTM.Core.Actors;
+using HTM.Core.Devices.Arduino.Messages.Requests;
+using HTM.Infrastructure.MessagesBase;
 
 namespace HTM.Core.Devices.Arduino.Actors;
 
-record DeviceConnected;
-
-public record TestMessage(string Message);
-
 public class ArduinoActor : BaseActor
 {
-    private readonly ISerialPortDevice _serialPortDevice;
-
-    private IActorRef _testActor;
-
-    public ArduinoActor(ISerialPortDevice serialPortDevice)
+    public ArduinoActor()
     {
-        _serialPortDevice = serialPortDevice;
+        var arduinoBridgeActor = Context.ActorOf(DependencyResolver.For(Context.System).Props<ArduinoBridgeActor>(), nameof(ArduinoBridgeActor));
 
-        _testActor = Context.ActorOf(Props.Create<TestActor>(), nameof(TestActor));
+        Receive<SendMessageRequest>(arduinoBridgeActor.Forward);
+        Receive<EventBase>(Context.System.EventStream.Publish);
         
-        Become(DeviceNotConnectedBehavior);
-    }
-
-    private void DeviceNotConnectedBehavior()
-    {
-        Receive<DeviceConnected>(_ => Become(DeviceConnectedBehavior));
-        Receive<InitializeDeviceEvent>(_ => _serialPortDevice.Initialize());
-        Context.System.EventStream.Subscribe<InitializeDeviceEvent>(Self);
-        
-        _serialPortDevice.Initialize()
-            .PipeTo(Self, Self, () => new DeviceConnected());
-    }
-    
-    private void DeviceConnectedBehavior()
-    {
-        _serialPortDevice.ConnectionChanged += (s, m) => OnArduinoConnectionChanged(m);
-        _serialPortDevice.OnMessageReceived += (s, m) => OnMessageReceived(m);
-        
-        Receive<GetTemperatureRequest>(OnGetTemperatureRequest);
-        Context.System.EventStream.Subscribe<GetTemperatureRequest>(Self);
-    }
-
-    private void OnArduinoConnectionChanged(bool isConnected)
-    {
-        //Context.System.EventStream.Publish(new DeviceConnectionChangedEvent(DeviceType.SerialPort, isConnected));
-    }
-
-    private void OnMessageReceived(string message)
-    {
-        _testActor.Tell(new TestMessage(message));
-        //Sender.Tell(new GetTemperatureResponse(message));
-    }
-
-    private void OnGetTemperatureRequest(GetTemperatureRequest request)
-    {
-        _serialPortDevice.SendMessage(SerialPortCommands.GetTemperature);
+        Context.System.EventStream.Subscribe<SendMessageRequest>(Self);
     }
 }

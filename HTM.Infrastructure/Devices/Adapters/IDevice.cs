@@ -1,4 +1,4 @@
-﻿namespace HTM.Infrastructure.Adapters;
+﻿namespace HTM.Infrastructure.Devices.Adapters;
 
 public interface IDevice
 {

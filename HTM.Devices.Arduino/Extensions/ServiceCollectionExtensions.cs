@@ -1,6 +1,6 @@
 ﻿using HTM.Devices.Arduino.Configurations;
 using HTM.Devices.Arduino.Services;
-using HTM.Infrastructure.Adapters;
+using HTM.Infrastructure.Devices.Adapters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

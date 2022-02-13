@@ -1,30 +1,28 @@
-﻿using Akka.Actor;
-using Akka.Event;
-using HTM.Infrastructure.Devices.Messages.Requests;
+﻿using HTM.Core.Devices.Arduino.Messages.Requests;
+using HTM.Infrastructure;
 using HTM.Infrastructure.Messages.Events;
 
 namespace HTM.Core.Actors;
 
 public class TemperatureMonitorActor : BaseActor
 {
-    private readonly TimeSpan _loopDelay = TimeSpan.FromMinutes(15);
-    
+    private readonly TimeSpan _loopDelay = TimeSpan.FromMilliseconds(300);
     public TemperatureMonitorActor()
     {
         Receive<TimerElapsedEvent>(_ =>
         {
-            
-            Context.System.EventStream.Publish(new GetTemperatureRequest());
+            Context.System.EventStream.Publish(new GetMessageByCommandRequest(SerialPortCommand.GetTemperature));
         });
-        Receive<GetTemperatureResponse>(HandleGetTemperatureResponse);
-
-        Context.System.EventStream.Subscribe<GetTemperatureResponse>(Self);
         
-        Context.System.Scheduler.ScheduleTellRepeatedly(TimeSpan.FromSeconds(15), _loopDelay, Self, TimerElapsedEvent.Instance, Self);
+        Context.System.EventStream.Publish(new GetMessageByCommandRequest(SerialPortCommand.GetTemperature));
+
+        Receive<GetMessageByCommandResponse>(OnGetMessageByCommandResponse);
+        
+        Context.System.Scheduler.ScheduleTellRepeatedly(TimeSpan.Zero, _loopDelay, Self, TimerElapsedEvent.Instance, Self);
     }
 
-    private void HandleGetTemperatureResponse(GetTemperatureResponse response)
+    private void OnGetMessageByCommandResponse(GetMessageByCommandResponse response)
     {
-     
+        
     }
 }

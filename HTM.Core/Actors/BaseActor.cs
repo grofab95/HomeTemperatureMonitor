@@ -12,7 +12,15 @@ public abstract class BaseActor : ReceiveActor
         Logger = Context.GetLogger();
     }
 
-    protected override void PreStart() => Logger.Info("Started");
+    protected override void PreStart()
+    {
+        Logger.Info("Started");
+    }
 
-    protected override void PostStop() => Logger.Info("Stopped");
+    protected override void PostStop()
+    {
+        Logger.Info("Stopped");
+    }
+
+    protected void StopSelf() => Context.Stop(Self);
 }

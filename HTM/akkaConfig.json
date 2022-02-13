@@ -12,12 +12,12 @@
     "loggers": [
       "Akka.Logger.Serilog.SerilogLogger, Akka.Logger.Serilog"
     ],
-    "loglevel": "INFO",    
+    "loglevel": "INFO",
     "remote": {
       "dot-netty": {
         "tcp": {
           "hostname": "localhost",
-          "port": 5010
+          "port": 5005
         }
       }
     }

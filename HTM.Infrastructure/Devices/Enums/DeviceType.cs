@@ -2,5 +2,5 @@
 
 public enum DeviceType
 {
-    SerialPort
+    Arduino
 }
