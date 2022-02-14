@@ -16,4 +16,17 @@
         <PackageReference Include="Akka.Logger.Serilog" Version="1.4.26" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Communication" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Communication\Protos\events.proto">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Communication\Protos\methods.proto">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

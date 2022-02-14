@@ -1,32 +1,33 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Google.Api.CommonProtos" Version="2.5.0" />
-    <PackageReference Include="Google.Protobuf" Version="3.19.4" />
-    <PackageReference Include="Grpc.AspNetCore" Version="2.42.0" />
-    <PackageReference Include="Grpc.Net.Client" Version="2.42.0" />
-    <PackageReference Include="Grpc.Tools" Version="2.43.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
+	<PropertyGroup>
+	<TargetFramework>net6.0</TargetFramework>
+	<ImplicitUsings>enable</ImplicitUsings>
+	<Nullable>enable</Nullable>
+	</PropertyGroup>
 
 	<ItemGroup>
-		<Protobuf Include="Protos\methods.proto" GrpcServices="Server" />
+	<PackageReference Include="Google.Api.CommonProtos" Version="2.5.0" />
+	<PackageReference Include="Google.Protobuf" Version="3.19.4" />
+	<PackageReference Include="Grpc.AspNetCore" Version="2.42.0" />
+	<PackageReference Include="Grpc.Net.Client" Version="2.42.0" />
+	<PackageReference Include="Grpc.Tools" Version="2.43.0">
+		<PrivateAssets>all</PrivateAssets>
+		<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	</PackageReference>
+	</ItemGroup>
+	<ItemGroup>
+	<ProjectReference Include="..\HTM.Infrastructure\HTM.Infrastructure.csproj" />
 	</ItemGroup>
 
-  <ItemGroup>
-    <Protobuf Include="Protos\events.proto" GrpcServices="Client" />
-  </ItemGroup>
+	<ItemGroup>
+		<Protobuf Include="..\HTM.Infrastructure\Communication\Protos\methods.proto" GrpcServices="Server">
+			<Link>Protos\methods.proto</Link>
+		</Protobuf>
 
-  <ItemGroup>
-    <ProjectReference Include="..\HTM.Infrastructure\HTM.Infrastructure.csproj" />
-  </ItemGroup>
+		<Protobuf Include="..\HTM.Infrastructure\Communication\Protos\events.proto" GrpcServices="Client">
+			<Link>Protos\events.proto</Link>
+		</Protobuf>
+	</ItemGroup>
 
 </Project>
