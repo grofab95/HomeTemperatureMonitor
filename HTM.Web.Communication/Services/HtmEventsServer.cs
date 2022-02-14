@@ -1,5 +1,6 @@
 ﻿using Grpc.Core;
 using HTM.Communication.V1;
+using HTM.Web.Communication.Extensions;
 using Newtonsoft.Json;
 using Serilog;
 
@@ -25,15 +26,3 @@ public class HtmEventsServer : HTMEventsService.HTMEventsServiceBase
     }
 }
 
-static class DeviceTypeExtensions
-{
-    public static Infrastructure.Devices.Enums.DeviceType ToDeviceType(this DeviceType deviceType)
-    {
-        return deviceType switch
-        {
-            DeviceType.Arduino => Infrastructure.Devices.Enums.DeviceType.Arduino,
-            
-            _ => throw new ArgumentOutOfRangeException(nameof(deviceType), deviceType, null)
-        };
-    }
-}

@@ -17,10 +17,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Communication" />
-    </ItemGroup>
-
-    <ItemGroup>
       <None Update="Communication\Protos\events.proto">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
