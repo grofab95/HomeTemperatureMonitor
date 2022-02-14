@@ -2,6 +2,8 @@
 
 package HTM.Communication.V1;
 
+import "common.proto";
+
 service HTMEventsService {
   rpc DeviceConnectionChanged (DeviceConnectionChangedRequest) returns (DeviceConnectionChangedResponse);
 }
@@ -13,8 +15,4 @@ message DeviceConnectionChangedRequest {
 
 message DeviceConnectionChangedResponse {
   string error = 1;
-}
-
-enum DeviceType {
-  ARDUINO = 0;
 }

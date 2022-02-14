@@ -2,8 +2,11 @@
 
 package HTM.Communication.V1;
 
+import "common.proto";
+
 service HTMMethodsService {
 	rpc GetMessageByCommand (GetMessageByCommandRequest) returns (GetMessageByCommandResponse);
+	rpc GetDeviceConnectionState (GetDeviceConnectionStateRequest) returns (GetDeviceConnectionStateResponse);
 }
 
 message GetMessageByCommandRequest {
@@ -12,4 +15,12 @@ message GetMessageByCommandRequest {
 
 message GetMessageByCommandResponse {
 	string message = 1;
+}
+
+message GetDeviceConnectionStateRequest {
+	DeviceType deviceType = 1;
+}
+
+message GetDeviceConnectionStateResponse {
+	bool isConnected = 1;
 }

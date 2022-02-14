@@ -17,6 +17,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Update="Communication\Protos\common.proto">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
       <None Update="Communication\Protos\events.proto">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>

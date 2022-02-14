@@ -1,9 +1,9 @@
 ﻿using Akka.Actor;
 using Akka.Event;
 using HTM.Core.Actors;
-using HTM.Core.Devices.Arduino.Messages.Requests;
 using HTM.Infrastructure.Akka;
 using HTM.Infrastructure.Devices.Messages.Events;
+using HTM.Infrastructure.Devices.Messages.Requests;
 using HTM.Infrastructure.Messages.Events;
 
 namespace HTM.Core.Devices.Arduino.Actors;

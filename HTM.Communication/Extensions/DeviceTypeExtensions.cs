@@ -1,6 +1,6 @@
 ﻿using HTM.Communication.V1;
 
-namespace HTM.Web.Communication.Extensions;
+namespace HTM.Communication.Extensions;
 
 public static class DeviceTypeExtensions
 {

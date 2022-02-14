@@ -1,5 +1,9 @@
-﻿using HTM.Core.Services;
+﻿using Grpc.Core;
+using HTM.Communication.Services;
+using HTM.Communication.V1;
+using HTM.Core.Services;
 using HTM.Devices.Arduino.Extensions;
+using HTM.Infrastructure.Akka;
 using HTM.Infrastructure.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -20,5 +24,18 @@ static IHostBuilder CreateHostBuilder(string[] args) =>
         .ConfigureServices(services =>
         {
             services.AddArduino();
+            services.AddSingleton<HtmActorBridge>();
             services.AddHostedService<AppService>();
+            services.AddSingleton(sp =>
+            {
+                var htmActorBridge = sp.GetRequiredService<HtmActorBridge>();
+                
+                return new Server
+                {
+                    Services = {HTMMethodsService.BindService(new HtmMethodsServer(htmActorBridge))},
+                    Ports = {new ServerPort("localhost", 2010, ServerCredentials.Insecure)}
+                };
+            });
+            
+            services.AddHostedService<GrpcHostedService>();
         });

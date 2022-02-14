@@ -2,5 +2,7 @@
 
 public enum SerialPortCommand
 {
-    GetTemperature
+    GetTemperature,
+    TurnLedOn,
+    TurnLedOff,
 }

@@ -6,6 +6,7 @@
 
 String message = "";
 char* buf;
+int ledState;
 
 OneWire oneWire(ONE_WIRE_BUS); 
 DallasTemperature sensors(&oneWire);
@@ -28,16 +29,19 @@ void loop()
     if(receiveVal == "GetTemperature")    
     {
       sensors.requestTemperatures(); 
-      message.concat(sensors.getTempCByIndex(0));
-      
-      //dtostrf(sensors.getTempCByIndex(0), 6, 2, message);
+      message.concat(sensors.getTempCByIndex(0)); 
+    }
 
-      //message = sensors.getTempCByIndex(0);
-      //message = "dupa jasia";
-      
-      digitalWrite(LED_PIN, 1);         
-      delay(500);
-      digitalWrite(LED_PIN, 0);   
+    if(receiveVal == "TurnLedOn")
+    {
+      digitalWrite(LED_PIN, 1);
+      message = "ok";
+    }
+
+    if(receiveVal == "TurnLedOff")
+    {
+      digitalWrite(LED_PIN, 0);
+      message = "ok";
     }
   }   
   

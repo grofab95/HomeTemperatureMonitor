@@ -1,6 +1,6 @@
 ﻿using HTM.Infrastructure.MessagesBase;
 
-namespace HTM.Core.Devices.Arduino.Messages.Events;
+namespace HTM.Infrastructure.Devices.Messages.Events;
 
 public class MessageReceivedEvent : EventBase
 {

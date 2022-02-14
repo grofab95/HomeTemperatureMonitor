@@ -2,8 +2,8 @@
 using HTM.Infrastructure;
 using HTM.Infrastructure.Akka;
 using HTM.Infrastructure.Messages.Events;
-using GetMessageByCommandRequest = HTM.Core.Devices.Arduino.Messages.Requests.GetMessageByCommandRequest;
-using GetMessageByCommandResponse = HTM.Core.Devices.Arduino.Messages.Requests.GetMessageByCommandResponse;
+using GetMessageByCommandRequest = HTM.Infrastructure.Devices.Messages.Requests.GetMessageByCommandRequest;
+using GetMessageByCommandResponse = HTM.Infrastructure.Devices.Messages.Requests.GetMessageByCommandResponse;
 
 namespace HTM.Core.Actors;
 

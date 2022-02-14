@@ -2,8 +2,8 @@
 using Akka.DependencyInjection;
 using Akka.Event;
 using HTM.Core.Actors;
-using HTM.Core.Devices.Arduino.Messages.Requests;
 using HTM.Infrastructure.Akka;
+using HTM.Infrastructure.Devices.Messages.Requests;
 using HTM.Infrastructure.MessagesBase;
 
 namespace HTM.Core.Devices.Arduino.Actors;

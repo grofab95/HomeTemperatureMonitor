@@ -2,6 +2,8 @@
 using Akka.Configuration;
 using Akka.DependencyInjection;
 using HTM.Core.Actors;
+using HTM.Infrastructure.Akka;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace HTM.Core.Services;
@@ -30,6 +32,13 @@ public class AppService : IHostedService
 
         _actorSystem = ActorSystem.Create("HtmActorSystem", actorSystemSetup);
         _actorSystem.ActorOf(DependencyResolver.For(_actorSystem).Props<HtmActor>(), nameof(HtmActor));
+
+        var requestHandlerActor = await _actorSystem
+            .ActorSelection("akka.tcp://HtmActorSystem@localhost:5005/user/HtmActor/RequestHandlerActor")
+            .ResolveOne(TimeSpan.FromSeconds(5), cancellationToken);
+
+        var htmActorBridge = _serviceProvider.GetRequiredService<HtmActorBridge>();
+        htmActorBridge.AddRequestHandlerActor(requestHandlerActor);
     }
 
     public Task StopAsync(CancellationToken cancellationToken)

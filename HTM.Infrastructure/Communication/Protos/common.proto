@@ -1,0 +1,7 @@
+﻿syntax = "proto3";
+
+package HTM.Communication.V1;
+
+enum DeviceType {
+  ARDUINO = 0;
+}

@@ -13,6 +13,7 @@ builder.Services.AddServerSideBlazor();
 var htmEventsService = new HtmEventsService();
 builder.Services.AddSingleton<IHtmEventsService, HtmEventsService>(_ => htmEventsService);
 builder.Services.AddSingleton<IHtmEventsInvoker, HtmEventsService>(_ => htmEventsService);
+builder.Services.AddScoped<HtmMethodsClient>();
 
 builder.Services.AddSingleton(sp =>
 {

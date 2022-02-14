@@ -24,6 +24,10 @@
     </ItemGroup>
 	
     <ItemGroup>
+		<Protobuf Include="..\HTM.Infrastructure\Communication\Protos\common.proto">
+			<Link>Protos\common.proto</Link>
+		</Protobuf>
+		
         <Protobuf Include="..\HTM.Infrastructure\Communication\Protos\methods.proto" GrpcServices="Client">
             <Link>Protos\methods.proto</Link>
         </Protobuf>

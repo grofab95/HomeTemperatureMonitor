@@ -1,5 +1,6 @@
 ﻿using Akka.Event;
 using Grpc.Net.Client;
+using HTM.Communication.Extensions;
 using HTM.Communication.V1;
 using HTM.Infrastructure.Akka;
 using HTM.Infrastructure.Devices.Messages.Events;
@@ -32,19 +33,7 @@ public class CommunicationActor : BaseActor
         }
         catch (Exception ex)
         {
-            
+            //todo:
         }
-    }
-}
-static class DeviceTypeExtensions
-{
-    public static DeviceType ToDeviceType(this Infrastructure.Devices.Enums.DeviceType deviceType)
-    {
-        return deviceType switch
-        {
-            Infrastructure.Devices.Enums.DeviceType.Arduino => DeviceType.Arduino,
-            
-            _ => throw new ArgumentOutOfRangeException(nameof(deviceType), deviceType, null)
-        };
     }
 }

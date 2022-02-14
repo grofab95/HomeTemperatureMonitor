@@ -1,6 +1,6 @@
 ﻿using HTM.Infrastructure.MessagesBase;
 
-namespace HTM.Core.Devices.Arduino.Messages.Requests;
+namespace HTM.Infrastructure.Devices.Messages.Requests;
 
 public class SendMessageRequest : RequestBase
 {
