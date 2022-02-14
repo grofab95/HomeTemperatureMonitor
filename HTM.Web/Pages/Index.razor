@@ -1,0 +1,11 @@
+@page "/"
+
+<PageTitle>Index</PageTitle>
+
+<h1>Arduino Tests!</h1>
+<h2>Status: <span style="@(_isConnected ? "color: green" : "color: red")">@(_isConnected ? "online" : "offline")</span></h2>
+
+<button @onclick="TurnOnLed">Led ON</button>
+<button @onclick="TurnOffLed">Led OFF</button>
+
+<h3>Message: @_message</h3>

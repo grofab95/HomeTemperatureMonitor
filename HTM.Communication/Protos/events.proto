@@ -1,0 +1,20 @@
+﻿syntax = "proto3";
+
+package HTM.Communication.V1;
+
+service HTMEventsService {
+  rpc DeviceConnectionChanged (DeviceConnectionChangedRequest) returns (DeviceConnectionChangedResponse);
+}
+
+message DeviceConnectionChangedRequest {
+  DeviceType deviceType = 1;
+  bool isConnected = 2;
+}
+
+message DeviceConnectionChangedResponse {
+  string error = 1;
+}
+
+enum DeviceType {
+  ARDUINO = 0;
+}

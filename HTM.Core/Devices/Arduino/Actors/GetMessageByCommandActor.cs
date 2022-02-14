@@ -3,6 +3,7 @@ using Akka.Event;
 using HTM.Core.Actors;
 using HTM.Core.Devices.Arduino.Messages.Events;
 using HTM.Core.Devices.Arduino.Messages.Requests;
+using HTM.Infrastructure.Akka;
 using HTM.Infrastructure.Messages.Events;
 
 namespace HTM.Core.Devices.Arduino.Actors;

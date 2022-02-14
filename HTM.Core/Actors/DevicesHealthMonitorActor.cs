@@ -1,4 +1,5 @@
 ﻿using Akka.Event;
+using HTM.Infrastructure.Akka;
 using HTM.Infrastructure.Devices.Messages.Events;
 
 namespace HTM.Core.Actors;

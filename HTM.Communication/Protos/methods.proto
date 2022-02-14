@@ -1,0 +1,15 @@
+﻿syntax = "proto3";
+
+package HTM.Communication.V1;
+
+service HTMMethodsService {
+	rpc GetMessageByCommand (GetMessageByCommandRequest) returns (GetMessageByCommandResponse);
+}
+
+message GetMessageByCommandRequest {
+	string command = 1;
+}
+
+message GetMessageByCommandResponse {
+	string message = 1;
+}

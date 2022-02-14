@@ -3,6 +3,7 @@ using Akka.Dispatch;
 using HTM.Core.Actors;
 using HTM.Core.Devices.Arduino.Messages.Events;
 using HTM.Core.Devices.Arduino.Messages.Requests;
+using HTM.Infrastructure.Akka;
 using HTM.Infrastructure.Devices.Adapters;
 using HTM.Infrastructure.Devices.Enums;
 using HTM.Infrastructure.Devices.Messages.Events;

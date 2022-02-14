@@ -1,7 +1,7 @@
 ﻿using Akka.Actor;
 using Akka.Event;
 
-namespace HTM.Core.Actors;
+namespace HTM.Infrastructure.Akka;
 
 public abstract class BaseActor : ReceiveActor
 {

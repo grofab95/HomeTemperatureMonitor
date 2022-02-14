@@ -14,6 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\HTM.Communication\HTM.Communication.csproj" />
       <ProjectReference Include="..\HTM.Infrastructure\HTM.Infrastructure.csproj" />
     </ItemGroup>
 
