@@ -24,10 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Configurations" />
-    </ItemGroup>
-
-    <ItemGroup>
+      <ProjectReference Include="..\HTM.Core\HTM.Core.csproj" />
       <ProjectReference Include="..\HTM.Infrastructure\HTM.Infrastructure.csproj" />
     </ItemGroup>
 

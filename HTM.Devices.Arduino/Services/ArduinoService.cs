@@ -55,6 +55,10 @@ public class ArduinoService : IDisposable, ISerialPortDevice
         {
             Log.Error("{ArduinoService} | Arduino not found at {Port}", nameof(ArduinoService), _serialPort.PortName);
         }
+        catch (UnauthorizedAccessException ex)
+        {
+            Log.Error("{ArduinoService} | Access to {Port} is denied", nameof(ArduinoService), _serialPort.PortName);
+        }
         catch (Exception ex)
         {
             // ignored

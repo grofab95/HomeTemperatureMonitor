@@ -14,7 +14,7 @@ public class HtmContext : DbContext
                 
     }
         
-    public HtmContext(DbContextOptions<HtmContext> options) 
+    public HtmContext(DbContextOptions<HtmContext> options) : base(options)
     {
         
     }
@@ -34,5 +34,12 @@ public class HtmContext : DbContext
         
         var connectionString = configuration.GetSection("Database")["ConnectionString"];
         optionsBuilder.UseSqlServer(connectionString);
+    }
+    
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(HtmContext).Assembly); 
     }
 }

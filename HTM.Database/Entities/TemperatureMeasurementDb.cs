@@ -16,3 +16,16 @@ public class TemperatureMeasurementDb : EntityBase
         Temperature = temperatureMeasurement.Temperature;
     }
 }
+
+public static class TemperatureMeasurementExtensions
+{
+    public static TemperatureMeasurement? ToModel(this TemperatureMeasurementDb entity)
+    {
+        return new TemperatureMeasurement
+        {
+            Id = entity.Id,
+            Temperature = entity.Temperature,
+            MeasurementDate = entity.MeasurementDate
+        };
+    }
+}
