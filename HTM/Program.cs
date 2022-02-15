@@ -2,6 +2,7 @@
 using HTM.Communication.Services;
 using HTM.Communication.V1;
 using HTM.Core.Services;
+using HTM.Database.Extensions;
 using HTM.Devices.Arduino.Extensions;
 using HTM.Infrastructure.Akka;
 using HTM.Infrastructure.Logging;
@@ -24,6 +25,7 @@ static IHostBuilder CreateHostBuilder(string[] args) =>
         .ConfigureServices(services =>
         {
             services.AddArduino();
+            services.AddDatabase();
             services.AddSingleton<HtmActorBridge>();
             services.AddHostedService<AppService>();
             services.AddSingleton(sp =>
