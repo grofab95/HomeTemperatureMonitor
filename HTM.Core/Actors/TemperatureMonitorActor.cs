@@ -1,5 +1,4 @@
-﻿using HTM.Communication.V1;
-using HTM.Infrastructure;
+﻿using HTM.Infrastructure;
 using HTM.Infrastructure.Akka;
 using HTM.Infrastructure.Messages.Events;
 using GetMessageByCommandRequest = HTM.Infrastructure.Devices.Messages.Requests.GetMessageByCommandRequest;
@@ -9,7 +8,7 @@ namespace HTM.Core.Actors;
 
 public class TemperatureMonitorActor : BaseActor
 {
-    private readonly TimeSpan _loopDelay = TimeSpan.FromMilliseconds(300);
+    private readonly TimeSpan _loopDelay = TimeSpan.FromSeconds(10);
     public TemperatureMonitorActor()
     {
         Receive<TimerElapsedEvent>(_ =>

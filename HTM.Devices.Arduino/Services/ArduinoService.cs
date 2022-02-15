@@ -51,7 +51,11 @@ public class ArduinoService : IDisposable, ISerialPortDevice
         {
             _serialPort.Open();
         }
-        catch
+        catch (FileNotFoundException ex)
+        {
+            Log.Error("{ArduinoService} | Arduino not found at {Port}", nameof(ArduinoService), _serialPort.PortName);
+        }
+        catch (Exception ex)
         {
             // ignored
         }

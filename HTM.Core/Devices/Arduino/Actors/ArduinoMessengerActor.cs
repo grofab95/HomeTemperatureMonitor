@@ -1,6 +1,5 @@
 ﻿using Akka.Actor;
 using Akka.Event;
-using HTM.Core.Actors;
 using HTM.Infrastructure.Akka;
 using HTM.Infrastructure.Devices.Messages.Events;
 using HTM.Infrastructure.Devices.Messages.Requests;
@@ -12,7 +11,7 @@ record RequestData(IActorRef Sender, GetMessageByCommandRequest Request);
 
 public class ArduinoMessengerActor : BaseActor
 {
-    private readonly TimeSpan _timerDelay = TimeSpan.FromMilliseconds(500);
+    private readonly TimeSpan _timerDelay = TimeSpan.FromMilliseconds(100);
     
     private readonly List<RequestData?> _requests;
     private bool _isArduinoConnected;
