@@ -5,14 +5,14 @@ package HTM.Communication.V1;
 import "common.proto";
 
 service HTMEventsService {
-  rpc DeviceConnectionChanged (DeviceConnectionChangedRequest) returns (DeviceConnectionChangedResponse);
+  rpc DeviceConnectionChanged (GrpcDeviceConnectionChangedRequest) returns (GrpcDeviceConnectionChangedResponse);
 }
 
-message DeviceConnectionChangedRequest {
-  DeviceType deviceType = 1;
+message GrpcDeviceConnectionChangedRequest {
+  GrpcDeviceType deviceType = 1;
   bool isConnected = 2;
 }
 
-message DeviceConnectionChangedResponse {
+message GrpcDeviceConnectionChangedResponse {
   string error = 1;
 }

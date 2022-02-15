@@ -15,14 +15,14 @@ public class HtmEventsServer : HTMEventsService.HTMEventsServiceBase
         _htmEventsInvoker = htmEventsInvoker;
     }
     
-    public override Task<DeviceConnectionChangedResponse> DeviceConnectionChanged(DeviceConnectionChangedRequest request, ServerCallContext context)
+    public override Task<GrpcDeviceConnectionChangedResponse> DeviceConnectionChanged(GrpcDeviceConnectionChangedRequest request, ServerCallContext context)
     {
         Log.Information("{HtmEventsServer} - {DeviceConnectionChanged} | Request={Request}", 
             nameof(HtmEventsServer), nameof(DeviceConnectionChanged), JsonConvert.SerializeObject(request));
         
         _htmEventsInvoker.InvokeDeviceConnectionChangedEvent(request.DeviceType.ToDeviceType(), request.IsConnected);
         
-        return Task.FromResult(new DeviceConnectionChangedResponse());
+        return Task.FromResult(new GrpcDeviceConnectionChangedResponse());
     }
 }
 

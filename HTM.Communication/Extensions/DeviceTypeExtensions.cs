@@ -1,25 +1,26 @@
 ﻿using HTM.Communication.V1;
+using HTM.Infrastructure.Devices.Enums;
 
 namespace HTM.Communication.Extensions;
 
 public static class DeviceTypeExtensions
 {
-    public static Infrastructure.Devices.Enums.DeviceType ToDeviceType(this DeviceType deviceType)
+    public static DeviceType ToDeviceType(this GrpcDeviceType deviceType)
     {
         return deviceType switch
         {
-            DeviceType.Arduino => Infrastructure.Devices.Enums.DeviceType.Arduino,
-            
+            GrpcDeviceType.Arduino => DeviceType.Arduino,
+
             _ => throw new ArgumentOutOfRangeException(nameof(deviceType), deviceType, null)
         };
     }
-    
-    public static DeviceType ToDeviceType(this Infrastructure.Devices.Enums.DeviceType deviceType)
+
+    public static GrpcDeviceType ToDeviceType(this DeviceType deviceType)
     {
         return deviceType switch
         {
-            Infrastructure.Devices.Enums.DeviceType.Arduino => DeviceType.Arduino,
-            
+            DeviceType.Arduino => GrpcDeviceType.Arduino,
+
             _ => throw new ArgumentOutOfRangeException(nameof(deviceType), deviceType, null)
         };
     }

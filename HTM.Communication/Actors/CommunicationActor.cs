@@ -26,7 +26,7 @@ public class CommunicationActor : BaseActor
         {
             var client = new HTMEventsService.HTMEventsServiceClient(_grpcChannel);
 
-            var response = await client.DeviceConnectionChangedAsync(new DeviceConnectionChangedRequest
+            var response = await client.DeviceConnectionChangedAsync(new GrpcDeviceConnectionChangedRequest
             {
                 DeviceType = @event.DeviceType.ToDeviceType(), IsConnected = @event.IsConnected
             });

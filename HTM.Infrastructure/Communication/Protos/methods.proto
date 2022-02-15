@@ -5,22 +5,22 @@ package HTM.Communication.V1;
 import "common.proto";
 
 service HTMMethodsService {
-	rpc GetMessageByCommand (GetMessageByCommandRequest) returns (GetMessageByCommandResponse);
-	rpc GetDeviceConnectionState (GetDeviceConnectionStateRequest) returns (GetDeviceConnectionStateResponse);
+	rpc GetMessageByCommand (GrpcGetMessageByCommandRequest) returns (GrpcGetMessageByCommandResponse);
+	rpc GetDeviceConnectionState (GrpcGetDeviceConnectionStateRequest) returns (GrpcGetDeviceConnectionStateResponse);
 }
 
-message GetMessageByCommandRequest {
+message GrpcGetMessageByCommandRequest {
 	string command = 1;
 }
 
-message GetMessageByCommandResponse {
+message GrpcGetMessageByCommandResponse {
 	string message = 1;
 }
 
-message GetDeviceConnectionStateRequest {
-	DeviceType deviceType = 1;
+message GrpcGetDeviceConnectionStateRequest {
+	GrpcDeviceType deviceType = 1;
 }
 
-message GetDeviceConnectionStateResponse {
+message GrpcGetDeviceConnectionStateResponse {
 	bool isConnected = 1;
 }

@@ -2,6 +2,6 @@
 
 package HTM.Communication.V1;
 
-enum DeviceType {
+enum GrpcDeviceType {
   ARDUINO = 0;
 }

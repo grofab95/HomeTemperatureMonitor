@@ -21,7 +21,7 @@ public class HtmMethodsClient
         try
         {
             var client = new HTMMethodsService.HTMMethodsServiceClient(_grpcChannel);
-            var response = await client.GetDeviceConnectionStateAsync(new GetDeviceConnectionStateRequest
+            var response = await client.GetDeviceConnectionStateAsync(new GrpcGetDeviceConnectionStateRequest
             {
                 DeviceType = deviceType.ToDeviceType()
             });
@@ -40,7 +40,7 @@ public class HtmMethodsClient
         try
         {
             var client = new HTMMethodsService.HTMMethodsServiceClient(_grpcChannel);
-            var response = await client.GetMessageByCommandAsync(new GetMessageByCommandRequest
+            var response = await client.GetMessageByCommandAsync(new GrpcGetMessageByCommandRequest
             {
                 Command = command.ToString()
             });

@@ -1,14 +1,10 @@
 ﻿using Akka.Actor;
 using Grpc.Core;
 using HTM.Communication.Extensions;
+using HTM.Communication.V1;
 using HTM.Infrastructure;
 using HTM.Infrastructure.Akka;
 using HTM.Infrastructure.Devices.Messages.Requests;
-
-using GrpcGetMessageByCommandRequest = HTM.Communication.V1.GetMessageByCommandRequest;
-using GrpcGetMessageByCommandResponse = HTM.Communication.V1.GetMessageByCommandResponse;
-using GrpcGetDeviceConnectionStateResponse = HTM.Communication.V1.GetDeviceConnectionStateResponse;
-using GrpcGetDeviceConnectionStateRequest = HTM.Communication.V1.GetDeviceConnectionStateRequest;
 
 namespace HTM.Communication.Services;
 
