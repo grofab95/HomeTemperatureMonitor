@@ -15,7 +15,7 @@ public static class SerilogHelper
             .WriteTo.File(
                 "logs//LOG_.log",
                 outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u4}][{LogSource}] {Message:lj}{NewLine}{Exception}",
-                restrictedToMinimumLevel: LogEventLevel.Information,
+                restrictedToMinimumLevel: LogEventLevel.Debug,
                 rollingInterval: RollingInterval.Day)
             .CreateBootstrapLogger();
     }
