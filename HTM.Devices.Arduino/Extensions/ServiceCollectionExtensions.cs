@@ -1,5 +1,6 @@
 ﻿using HTM.Devices.Arduino.Configurations;
 using HTM.Devices.Arduino.Services;
+using HTM.Infrastructure.Constants;
 using HTM.Infrastructure.Devices.Adapters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +13,20 @@ public static class ServiceCollectionExtensions
     {
         services.AddOptions<ArduinoOptions>()
             .Configure<IConfiguration>((o, c) => c.GetSection(ArduinoOptions.SectionName).Bind(o));
+        
+        var portName = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile(Application.AppSettingsFile)
+            .Build()
+            .GetSection(ArduinoOptions.SectionName)[nameof(ArduinoOptions.PortName)];
 
-        services.AddSingleton<ISerialPortDevice, ArduinoService>();
+        if (portName == ArduinoOptions.Emulator)
+        {
+            services.AddSingleton<ISerialPortDevice, ArduinoEmulatorService>();
+        }
+        else
+        {
+            services.AddSingleton<ISerialPortDevice, ArduinoService>();
+        }
     }
 }
