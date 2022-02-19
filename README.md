@@ -2,7 +2,7 @@
 
 Stack: .Net 6, Akka.Net, Arduino, GRPC, Blazor, EF Core
 
-Project has two main application: 
+Project has two main applications: 
 - HTM console app
 - HTM.Web blazor server side app
 
