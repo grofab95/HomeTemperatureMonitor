@@ -18,6 +18,7 @@ public class ArduinoService : IDisposable, ISerialPortDevice
     private readonly SerialPort _serialPort;
     private readonly Timer _timer;
     private bool _isConnected;
+    private bool _disconnectedLogged;
 
     public ArduinoService(IOptions<ArduinoOptions> arduinoOptions)
     {
@@ -50,10 +51,15 @@ public class ArduinoService : IDisposable, ISerialPortDevice
         try
         {
             _serialPort.Open();
+            _disconnectedLogged = false;
         }
         catch (FileNotFoundException ex)
         {
-            Log.Error("{ArduinoService} | Arduino not found at {Port}", nameof(ArduinoService), _serialPort.PortName);
+            if (!_disconnectedLogged)
+            {
+                Log.Error("{ArduinoService} | Arduino not found at {Port}", nameof(ArduinoService), _serialPort.PortName);
+                _disconnectedLogged = true;
+            }
         }
         catch (UnauthorizedAccessException ex)
         {
