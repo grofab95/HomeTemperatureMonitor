@@ -2,6 +2,7 @@
 using Akka.Configuration;
 using Akka.DependencyInjection;
 using HTM.Core.Actors;
+using HTM.Infrastructure.Adapters;
 using HTM.Infrastructure.Akka;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -20,6 +21,9 @@ public class AppService : IHostedService
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
+        var persistenceInitializer = _serviceProvider.GetRequiredService<IPersistenceInitializer>();
+        await persistenceInitializer.Initialize();
+        
         var configuration = await File.ReadAllTextAsync(
             Path.Combine(Directory.GetCurrentDirectory(), "akkaConfig.json"),
             cancellationToken);

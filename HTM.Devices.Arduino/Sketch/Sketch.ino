@@ -1,7 +1,8 @@
-﻿#include <OneWire.h> 
+#include <OneWire.h> 
 #include <DallasTemperature.h>
 
 #define ONE_WIRE_BUS 2 
+#define DEBUG_LED_PIN 13
 #define LED_PIN 4
 
 String message = "";
@@ -13,6 +14,7 @@ DallasTemperature sensors(&oneWire);
 void setup() 
 { 
   
+  pinMode(DEBUG_LED_PIN, OUTPUT);
   pinMode(LED_PIN, OUTPUT);
   sensors.begin();
 
@@ -28,8 +30,10 @@ void loop()
       
     if(receiveVal == "GetTemperature")    
     {
+      digitalWrite(DEBUG_LED_PIN, 1);
       sensors.requestTemperatures(); 
       message.concat(sensors.getTempCByIndex(0)); 
+      digitalWrite(DEBUG_LED_PIN, 0);
     }
 
     if(receiveVal == "TurnLedOn")
