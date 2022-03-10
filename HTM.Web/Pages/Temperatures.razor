@@ -1,0 +1,75 @@
+@page "/temperatures"
+
+<h3>Temperatures</h3>
+
+<div style="display: flex; justify-content: center;">
+    <RadzenCard class="mb-2" Style="width: 30%; align-items: center;">
+        <div class="row" style="flex-direction: column;">
+            <div class="col">
+                From
+            </div>
+            
+            <div class="col">
+                <RadzenDatePicker TValue="DateTime"
+                                  ShowTime="true"
+                                  ShowSeconds="true"
+                                  HoursStep="1.5"
+                                  MinutesStep="5"
+                                  SecondsStep="10"
+                                  Change=@(async _ => await FetchData())
+                                  @bind-Value="@_fromDate"
+                                  DateFormat="MM/dd/yyyy HH:mm" class="mb-2" />             
+            </div>
+        </div>
+        
+        <div class="row" style="flex-direction: column;">
+            <div class="col">
+                To
+            </div>
+            
+            <div class="col">
+                <RadzenDatePicker TValue="DateTime"
+                                  ShowTime="true"
+                                  ShowSeconds="true"
+                                  HoursStep="1.5"
+                                  MinutesStep="5"
+                                  SecondsStep="10"
+                                  Change=@(async _ => await FetchData())
+                                  @bind-Value="@_toDate"
+                                  DateFormat="MM/dd/yyyy HH:mm" />             
+            </div>
+        </div>
+    </RadzenCard>
+</div>
+
+@if (_temperatureMeasurement != null)
+{
+    <RadzenCard>
+        <div class="container" style="font-size: 20px;">
+            <div class="row">
+                <div class="col-sm-12 my-5">
+                    <RadzenChart>
+                        <RadzenLineSeries TItem="TemperatureMeasurement"
+                                          Smooth="false"
+                                          Data="@_temperatureMeasurement" 
+                                          Title=""
+                                          CategoryProperty="@nameof(TemperatureMeasurement.MeasurementDate)"
+                                          ValueProperty="@nameof(TemperatureMeasurement.Temperature)">
+                            <RadzenMarkers MarkerType="MarkerType.Circle"/>
+                        </RadzenLineSeries>
+                        <RadzenCategoryAxis Padding="20">
+                            <RadzenGridLines Visible="true"/>
+                            <RadzenAxisTitle Text="Time"/>
+                        </RadzenCategoryAxis>
+                        <RadzenValueAxis>
+                            <RadzenGridLines Visible="true"/>
+                            <RadzenAxisTitle Text="Temperature"/>
+                        </RadzenValueAxis>
+                    </RadzenChart>
+                </div>
+            </div>
+        </div>
+    </RadzenCard>
+}
+
+<PleaseWaitComponent @ref="@_pleaseWaitComponent" />

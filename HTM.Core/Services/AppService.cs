@@ -37,6 +37,8 @@ public class AppService : IHostedService
         _actorSystem = ActorSystem.Create("HtmActorSystem", actorSystemSetup);
         _actorSystem.ActorOf(DependencyResolver.For(_actorSystem).Props<HtmActor>(), nameof(HtmActor));
 
+        await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
+        
         var requestHandlerActor = await _actorSystem
             .ActorSelection("akka.tcp://HtmActorSystem@localhost:5005/user/HtmActor/RequestHandlerActor")
             .ResolveOne(TimeSpan.FromSeconds(5), cancellationToken);

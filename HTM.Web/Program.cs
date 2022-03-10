@@ -2,6 +2,7 @@ using Grpc.Core;
 using HTM.Communication.V1;
 using HTM.Infrastructure.Logging;
 using HTM.Web.Communication.Services;
+using Radzen;
 
 SerilogHelper.AddSerilog();
 
@@ -9,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddScoped<DialogService>();
 
 var htmEventsService = new HtmEventsService();
 builder.Services.AddSingleton<IHtmEventsService, HtmEventsService>(_ => htmEventsService);

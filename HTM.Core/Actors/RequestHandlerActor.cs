@@ -1,9 +1,11 @@
 ﻿using Akka.Actor;
 using HTM.Infrastructure.Akka;
 using HTM.Infrastructure.Devices.Messages.Requests;
+using HTM.Infrastructure.Measurements.Messages.Requests;
 
 namespace HTM.Core.Actors;
 
+// todo: refactoring
 public class RequestHandlerActor : BaseActor
 {
     private IActorRef _sender; // todo: create query actor
@@ -30,7 +32,17 @@ public class RequestHandlerActor : BaseActor
 
         Receive<GetMessageByCommandResponse>(res =>
         {
-            
+            _sender.Tell(res);
+        });
+        
+        Receive<GetTemperatureMeasurementsByDateRangeRequest>(r =>
+        {
+            _sender = Sender;
+            Context.System.EventStream.Publish(r);
+        });
+
+        Receive<GetTemperatureMeasurementsByDateRangeResponse>(res =>
+        {
             _sender.Tell(res);
         });
     }

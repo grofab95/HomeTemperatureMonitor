@@ -1,9 +1,11 @@
-﻿using Grpc.Net.Client;
+﻿using Google.Protobuf.WellKnownTypes;
+using Grpc.Net.Client;
 using HTM.Communication.V1;
 using HTM.Infrastructure;
+using HTM.Infrastructure.Devices.Enums;
+using HTM.Infrastructure.Models;
 using HTM.Web.Communication.Extensions;
 using Serilog;
-using DeviceType = HTM.Infrastructure.Devices.Enums.DeviceType;
 
 namespace HTM.Web.Communication.Services;
 
@@ -51,6 +53,26 @@ public class HtmMethodsClient
         {
             Log.Error(ex, nameof(GetDeviceConnectionStatus));
             return ex.Message;
+        }
+    }
+    
+    public async Task<TemperatureMeasurement[]?> GetTemperaturesMeasurements(DateTime from, DateTime to)
+    {
+        try
+        {
+            var client = new HTMMethodsService.HTMMethodsServiceClient(_grpcChannel);
+            var response = await client.GrpcGetTemperatureMeasurementsAsync(new GrpcGetTemperatureMeasurementsRequest
+            {
+                From = Timestamp.FromDateTime(DateTime.SpecifyKind(from, DateTimeKind.Utc)),
+                To = Timestamp.FromDateTime(DateTime.SpecifyKind(to, DateTimeKind.Utc))
+            });
+
+            return response.GrpcTemperatureMeasurements.Select(x => x.ToTemperaturesMeasurement()).ToArray();
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, nameof(GetDeviceConnectionStatus));
+            return null;
         }
     }
 }

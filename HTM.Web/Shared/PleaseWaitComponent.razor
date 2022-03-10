@@ -1,0 +1,15 @@
+@code {  
+    [Inject] public DialogService Dialog { get; set; }
+
+    public void Show() => Dialog.Open("Please wait", ds =>
+        @<div>
+            <div style="text-align: center">
+                <p>Please wait ...</p>
+                <div class="spinner-grow text-primary" style="width: 5rem; height: 5rem;" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        </div>, new DialogOptions { Width = "300px", ShowTitle = false });
+
+    public void Close() => Dialog.Close();
+}

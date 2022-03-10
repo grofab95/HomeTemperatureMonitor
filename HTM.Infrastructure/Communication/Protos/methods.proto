@@ -2,11 +2,13 @@
 
 package HTM.Communication.V1;
 
+import "google/protobuf/timestamp.proto";
 import "common.proto";
 
 service HTMMethodsService {
 	rpc GetMessageByCommand (GrpcGetMessageByCommandRequest) returns (GrpcGetMessageByCommandResponse);
 	rpc GetDeviceConnectionState (GrpcGetDeviceConnectionStateRequest) returns (GrpcGetDeviceConnectionStateResponse);
+	rpc GrpcGetTemperatureMeasurements (GrpcGetTemperatureMeasurementsRequest) returns (GrpcGetTemperatureMeasurementsResponse);
 }
 
 message GrpcGetMessageByCommandRequest {
@@ -23,4 +25,19 @@ message GrpcGetDeviceConnectionStateRequest {
 
 message GrpcGetDeviceConnectionStateResponse {
 	bool isConnected = 1;
+}
+
+message GrpcGetTemperatureMeasurementsRequest {
+	google.protobuf.Timestamp from = 1;
+	google.protobuf.Timestamp to = 2;
+}
+
+message GrpcGetTemperatureMeasurementsResponse {
+	repeated GrpcTemperatureMeasurement GrpcTemperatureMeasurements = 1;
+}
+
+message GrpcTemperatureMeasurement {
+	int64 id = 1;
+	google.protobuf.Timestamp measurementDate = 2;
+	float temperature = 3;
 }

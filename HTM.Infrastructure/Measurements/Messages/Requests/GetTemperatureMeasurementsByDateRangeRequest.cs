@@ -2,6 +2,12 @@
 
 public class GetTemperatureMeasurementsByDateRangeRequest
 {
-    public DateTime From { get; set; }
-    public DateTime To { get; set; }
+    public DateTime From { get; }
+    public DateTime To { get; }
+
+    public GetTemperatureMeasurementsByDateRangeRequest(DateTime from, DateTime to)
+    {
+        From = from;
+        To = to;
+    }
 }

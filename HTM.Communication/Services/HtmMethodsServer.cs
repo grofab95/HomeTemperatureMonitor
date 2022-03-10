@@ -5,6 +5,7 @@ using HTM.Communication.V1;
 using HTM.Infrastructure;
 using HTM.Infrastructure.Akka;
 using HTM.Infrastructure.Devices.Messages.Requests;
+using HTM.Infrastructure.Measurements.Messages.Requests;
 
 namespace HTM.Communication.Services;
 
@@ -19,25 +20,41 @@ public class HtmMethodsServer : V1.HTMMethodsService.HTMMethodsServiceBase
     
     public override async Task<GrpcGetDeviceConnectionStateResponse> GetDeviceConnectionState(GrpcGetDeviceConnectionStateRequest request, ServerCallContext context)
     {
-        var res = await _htmActorBridge.RequestHandlerActor
+        var response = await _htmActorBridge.RequestHandlerActor
             .Ask<GetDeviceConnectionStateResponse>(
                 new GetDeviceConnectionStateRequest(request.DeviceType.ToDeviceType()));
 
         return new GrpcGetDeviceConnectionStateResponse
         {
-            IsConnected = res.IsConnected
+            IsConnected = response.IsConnected
         };
     }
 
     public override async Task<GrpcGetMessageByCommandResponse> GetMessageByCommand(GrpcGetMessageByCommandRequest request, ServerCallContext context)
     {
-        var res = await _htmActorBridge.RequestHandlerActor
+        var response = await _htmActorBridge.RequestHandlerActor
             .Ask<GetMessageByCommandResponse>(
                 new GetMessageByCommandRequest(Enum.Parse<SerialPortCommand>(request.Command)));
 
         return new GrpcGetMessageByCommandResponse
         {
-          Message  = res.Message
+          Message  = response.Message
         };
+    }
+
+    public override async Task<GrpcGetTemperatureMeasurementsResponse> GrpcGetTemperatureMeasurements(GrpcGetTemperatureMeasurementsRequest request, ServerCallContext context)
+    {
+        var from = request.From.ToDateTime();
+        var to = request.To.ToDateTime();
+        
+        var response = await _htmActorBridge.RequestHandlerActor
+            .Ask<GetTemperatureMeasurementsByDateRangeResponse>(
+                new GetTemperatureMeasurementsByDateRangeRequest(from, to));
+
+        var grpcResponse = new GrpcGetTemperatureMeasurementsResponse();
+        grpcResponse.GrpcTemperatureMeasurements.AddRange(
+            response.TemperatureMeasurements?.Select(x => x.ToGrpcTemperatureMeasurement()));
+
+        return grpcResponse;
     }
 }
