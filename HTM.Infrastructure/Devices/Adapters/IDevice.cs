@@ -1,6 +1,6 @@
 ﻿namespace HTM.Infrastructure.Devices.Adapters;
 
-public interface IDevice
+public interface IDevice : IDisposable
 {
     Task Initialize();
     event EventHandler<bool> ConnectionChanged;

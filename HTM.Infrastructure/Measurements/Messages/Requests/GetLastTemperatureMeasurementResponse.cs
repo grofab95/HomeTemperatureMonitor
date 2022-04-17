@@ -4,7 +4,7 @@ namespace HTM.Infrastructure.Measurements.Messages.Requests;
 
 public class GetLastTemperatureMeasurementResponse
 {
-    public static GetLastTemperatureMeasurementResponse WithSuccess(TemperatureMeasurement? measurement) => new(measurement);
+    public static GetLastTemperatureMeasurementResponse WithSuccess(TemperatureMeasurement measurement) => new(measurement);
     public static GetLastTemperatureMeasurementResponse WithFailure(Exception exception) => new(exception);
     
     public TemperatureMeasurement TemperatureMeasurement { get; }

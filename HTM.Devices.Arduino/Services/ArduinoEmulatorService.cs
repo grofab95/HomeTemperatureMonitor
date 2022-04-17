@@ -5,8 +5,8 @@ namespace HTM.Devices.Arduino.Services;
 
 public class ArduinoEmulatorService : ISerialPortDevice
 {
-    public event EventHandler<bool>? ConnectionChanged;
-    public event EventHandler<string>? OnMessageReceived;
+    public event EventHandler<bool> ConnectionChanged;
+    public event EventHandler<string> OnMessageReceived;
 
     private readonly Random _random = new Random();
 
@@ -17,7 +17,7 @@ public class ArduinoEmulatorService : ISerialPortDevice
         ConnectionChanged?.Invoke(this, true);
     }
 
-    public void SendMessage(string? message)
+    public void SendMessage(string message)
     {
         if (!Enum.TryParse<SerialPortCommand>(message, out var command))
         {
@@ -35,5 +35,9 @@ public class ArduinoEmulatorService : ISerialPortDevice
         };
         
         OnMessageReceived?.Invoke(this, callbackMessage);
+    }
+
+    public void Dispose()
+    {
     }
 }

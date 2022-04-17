@@ -2,5 +2,5 @@
 
 public abstract class RequestBase
 {
-    public string? RequestId { get; } = Guid.NewGuid().ToString();
+    public string RequestId { get; } = Guid.NewGuid().ToString();
 }

@@ -2,9 +2,9 @@
 
 public abstract class ResponseBase
 {
-    public string? RequestId { get; }
+    public string RequestId { get; }
 
-    public ResponseBase(string? requestId)
+    public ResponseBase(string requestId)
     {
         RequestId = requestId;
     }

@@ -1,9 +1,8 @@
 ﻿using Akka.Actor;
-using Akka.Dispatch;
-using HTM.Core.Actors;
 using HTM.Infrastructure.Akka;
 using HTM.Infrastructure.Devices.Adapters;
 using HTM.Infrastructure.Devices.Enums;
+using HTM.Infrastructure.Devices.Messages;
 using HTM.Infrastructure.Devices.Messages.Events;
 using HTM.Infrastructure.Devices.Messages.Requests;
 
@@ -22,12 +21,30 @@ public class ArduinoBridgeActor : BaseActor
         _serialPortDevice.ConnectionChanged += NotifyArduinoConnectionChanged;
         _serialPortDevice.OnMessageReceived += NotifyArduinoMessageReceived;
 
+        Receive<InitializationResultMessage>(
+            _ => Logger.Info("ArduinoBridgeActor | Device initialization success"),
+            result => !result.IsError);
+        
+        Receive<InitializationResultMessage>(
+            result => Logger.Error("ArduinoBridgeActor | Device initialization Error={Error}", result.Exception.Message),
+            result => result.IsError);
+
         Receive<SendMessageRequest>(SendMessage);
     }
 
     protected override void PreStart()
     {
-        ActorTaskScheduler.RunTask(_serialPortDevice.Initialize);
+        _serialPortDevice.Initialize()
+            .PipeTo(
+                Self,
+                Self,
+                () => InitializationResultMessage.WithSuccess,
+                InitializationResultMessage.WithError);
+    }
+
+    protected override void PostStop()
+    {
+        _serialPortDevice?.Dispose();
     }
 
     private void SendMessage(SendMessageRequest request)
@@ -48,12 +65,12 @@ public class ArduinoBridgeActor : BaseActor
         Sender.Tell(response);
     }
 
-    private void NotifyArduinoConnectionChanged(object? sender, bool isConnected)
+    private void NotifyArduinoConnectionChanged(object sender, bool isConnected)
     {
         _deviceActor.Tell(new DeviceConnectionChangedEvent(DeviceType.Arduino, isConnected));
     }
 
-    private void NotifyArduinoMessageReceived(object? sender, string message)
+    private void NotifyArduinoMessageReceived(object sender, string message)
     {
         _deviceActor.Tell(new MessageReceivedEvent(message));
     }

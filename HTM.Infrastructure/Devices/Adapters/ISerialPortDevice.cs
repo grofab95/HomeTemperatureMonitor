@@ -2,6 +2,6 @@
 
 public interface ISerialPortDevice : IDevice
 {
-    void SendMessage(string? message);
+    void SendMessage(string message);
     event EventHandler<string> OnMessageReceived;
 }

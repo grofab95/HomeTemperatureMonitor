@@ -4,19 +4,17 @@ using HTM.Infrastructure.Exceptions;
 using Microsoft.Extensions.Options;
 using Serilog;
 using System.IO.Ports;
-using Timer = System.Timers.Timer;
 
 namespace HTM.Devices.Arduino.Services;
 
-public class ArduinoService : IDisposable, ISerialPortDevice
+public class ArduinoService : ISerialPortDevice
 {
-    public event EventHandler<string>? OnMessageReceived;
-    public event EventHandler<bool>? ConnectionChanged;
+    public event EventHandler<string> OnMessageReceived;
+    public event EventHandler<bool> ConnectionChanged;
 
     private const int CheckConnectionHealthDelayInMs = 300;
     
     private readonly SerialPort _serialPort;
-    private readonly Timer _timer;
     private bool _isConnected;
     private bool _disconnectedLogged;
 
@@ -24,26 +22,31 @@ public class ArduinoService : IDisposable, ISerialPortDevice
     {
         _serialPort = new SerialPort(arduinoOptions.Value.PortName, arduinoOptions.Value.PortBaudRate);
         _serialPort.DataReceived += OnDataReceived;
-        _timer = new Timer(CheckConnectionHealthDelayInMs);
-        _timer.Elapsed += (_,_) => CheckConnectionHealth();
-        _timer.Start();
     }
 
-    private void CheckConnectionHealth()
+    public async Task Initialize()
     {
-        if (!_serialPort.IsOpen)
+        await Task.Factory.StartNew(CheckConnectionHealthLoop, TaskCreationOptions.LongRunning);
+    }
+
+    private async Task CheckConnectionHealthLoop()
+    {
+        while (true)
         {
-            TryOpenPort();
+            if (!_serialPort.IsOpen)
+            {
+                TryOpenPort();
+            }
+
+            if (_serialPort.IsOpen != _isConnected)
+            {
+                _isConnected = _serialPort.IsOpen;
+
+                ConnectionChanged?.Invoke(this, _serialPort.IsOpen);
+            }
+
+            await Task.Delay(CheckConnectionHealthDelayInMs);
         }
-        
-        if (_serialPort.IsOpen == _isConnected)
-        {
-            return;
-        }
-        
-        _isConnected = _serialPort.IsOpen;
-        
-        ConnectionChanged?.Invoke(this, _serialPort.IsOpen);
     }
     
     private void TryOpenPort()
@@ -53,7 +56,7 @@ public class ArduinoService : IDisposable, ISerialPortDevice
             _serialPort.Open();
             _disconnectedLogged = false;
         }
-        catch (FileNotFoundException ex)
+        catch (FileNotFoundException)
         {
             if (!_disconnectedLogged)
             {
@@ -61,11 +64,11 @@ public class ArduinoService : IDisposable, ISerialPortDevice
                 _disconnectedLogged = true;
             }
         }
-        catch (UnauthorizedAccessException ex)
+        catch (UnauthorizedAccessException)
         {
             Log.Error("{ArduinoService} | Access to {Port} is denied", nameof(ArduinoService), _serialPort.PortName);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // ignored
         }
@@ -81,10 +84,8 @@ public class ArduinoService : IDisposable, ISerialPortDevice
         
         OnMessageReceived?.Invoke(this, message);
     }
-    
-    public Task Initialize() => Task.CompletedTask;
 
-    public void SendMessage(string? message)
+    public void SendMessage(string message)
     {
         if (string.IsNullOrEmpty(message))
         {
@@ -103,8 +104,6 @@ public class ArduinoService : IDisposable, ISerialPortDevice
     
     public void Dispose()
     {
-        _timer.Close();
-        _timer.Dispose();
         _serialPort.DataReceived -= OnDataReceived;
         _serialPort.Close();
         _serialPort.Dispose();

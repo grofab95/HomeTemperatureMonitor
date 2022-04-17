@@ -20,7 +20,7 @@ public partial class Index : IDisposable
         _isConnected = await HtmMethodsClient.GetDeviceConnectionStatus(DeviceType.Arduino);
     }
 
-    private void OnDeviceConnectionChangedEvent(object? sender, (DeviceType deviceType, bool isConnected) e)
+    private void OnDeviceConnectionChangedEvent(object sender, (DeviceType deviceType, bool isConnected) e)
     {
         InvokeAsync(() =>
         {
@@ -29,7 +29,7 @@ public partial class Index : IDisposable
         });
     }
 
-    private void OnMessage(object? sender, string message)
+    private void OnMessage(object sender, string message)
     {
         InvokeAsync(() =>
         {
