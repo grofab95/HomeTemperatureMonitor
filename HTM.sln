@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HTM.Web", "HTM.Web\HTM.Web.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HTM.Web.Communication", "HTM.Web.Communication\HTM.Web.Communication.csproj", "{DD364499-8242-478C-8992-DEA39F8D237F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HTM.Core.Tests", "HTM.Core.Tests\HTM.Core.Tests.csproj", "{1158B7BD-A015-48CE-A85D-F24A953F24C6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +67,10 @@ Global
 		{DD364499-8242-478C-8992-DEA39F8D237F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD364499-8242-478C-8992-DEA39F8D237F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD364499-8242-478C-8992-DEA39F8D237F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1158B7BD-A015-48CE-A85D-F24A953F24C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1158B7BD-A015-48CE-A85D-F24A953F24C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1158B7BD-A015-48CE-A85D-F24A953F24C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1158B7BD-A015-48CE-A85D-F24A953F24C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,6 +86,7 @@ Global
 		{AA9E69C7-2A0C-4381-BB25-3412038A0E0D} = {80E81FCC-6358-48F6-AAD8-F1E97DA56C12}
 		{E6E5FD23-1619-49B8-8845-01830393794A} = {AA9E69C7-2A0C-4381-BB25-3412038A0E0D}
 		{DD364499-8242-478C-8992-DEA39F8D237F} = {AA9E69C7-2A0C-4381-BB25-3412038A0E0D}
+		{1158B7BD-A015-48CE-A85D-F24A953F24C6} = {E52064C5-CA5E-495D-8F6B-14B834600BE7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {24E6F5D6-3779-4BEB-9870-4E15B856A700}

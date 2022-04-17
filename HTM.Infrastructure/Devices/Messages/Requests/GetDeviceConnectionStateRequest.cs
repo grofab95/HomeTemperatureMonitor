@@ -3,11 +3,11 @@ using HTM.Infrastructure.MessagesBase;
 
 namespace HTM.Infrastructure.Devices.Messages.Requests;
 
-public class GetDeviceConnectionStateHtmRequest : HtmRequest
+public class GetDeviceConnectionStateRequest : HtmRequest
 {
     public DeviceType DeviceType { get; }
     
-    public GetDeviceConnectionStateHtmRequest(DeviceType deviceType)
+    public GetDeviceConnectionStateRequest(DeviceType deviceType)
     {
         DeviceType = deviceType;
     }

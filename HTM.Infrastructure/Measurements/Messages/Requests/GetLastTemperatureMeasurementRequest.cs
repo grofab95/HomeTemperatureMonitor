@@ -2,7 +2,7 @@
 
 namespace HTM.Infrastructure.Measurements.Messages.Requests;
 
-public class GetLastTemperatureMeasurementHtmRequest : HtmRequest
+public class GetLastTemperatureMeasurementRequest : HtmRequest
 {
     
 }

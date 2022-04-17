@@ -15,18 +15,18 @@ public class TemperatureMeasurementActor : BaseActor
     {
         _temperatureMeasurementDao = temperatureMeasurementDao;
 
-        Receive<AddTemperatureMeasurementHtmRequest>(AddMeasurement);
-        Receive<GetLastTemperatureMeasurementHtmRequest>(GetLastMeasurement);
-        Receive<GetTemperatureMeasurementsByDateRangeHtmRequest>(GetMeasurementsByDateRange);
+        Receive<AddTemperatureMeasurementRequest>(AddMeasurement);
+        Receive<GetLastTemperatureMeasurementRequest>(GetLastMeasurement);
+        Receive<GetTemperatureMeasurementsByDateRangeRequest>(GetMeasurementsByDateRange);
         
-        Context.System.EventStream.Subscribe<AddTemperatureMeasurementHtmRequest>(Self);
-        Context.System.EventStream.Subscribe<GetLastTemperatureMeasurementHtmRequest>(Self);
-        Context.System.EventStream.Subscribe<GetTemperatureMeasurementsByDateRangeHtmRequest>(Self);
+        Context.System.EventStream.Subscribe<AddTemperatureMeasurementRequest>(Self);
+        Context.System.EventStream.Subscribe<GetLastTemperatureMeasurementRequest>(Self);
+        Context.System.EventStream.Subscribe<GetTemperatureMeasurementsByDateRangeRequest>(Self);
         
         Context.System.EventStream.Publish(TemperatureMeasurementActorInitializedEvent.Instance);
     }
     
-    private void AddMeasurement(AddTemperatureMeasurementHtmRequest request)
+    private void AddMeasurement(AddTemperatureMeasurementRequest request)
     {
         Logger.Info("AddMeasurement");
 
@@ -38,7 +38,7 @@ public class TemperatureMeasurementActor : BaseActor
                 ex => AddTemperatureMeasurementResponse.WithFailure(request.RequestId, ex));
     }
 
-    private void GetLastMeasurement(GetLastTemperatureMeasurementHtmRequest request)
+    private void GetLastMeasurement(GetLastTemperatureMeasurementRequest request)
     {
         Logger.Info("GetLastMeasurement");
         
@@ -50,7 +50,7 @@ public class TemperatureMeasurementActor : BaseActor
                 ex => GetLastTemperatureMeasurementResponse.WithFailure(request.RequestId, ex));
     }
 
-    private void GetMeasurementsByDateRange(GetTemperatureMeasurementsByDateRangeHtmRequest request)
+    private void GetMeasurementsByDateRange(GetTemperatureMeasurementsByDateRangeRequest request)
     {
         Logger.Info("GetMeasurementsByDateRange | From={From}, To={To}", request.From, request.To);
         

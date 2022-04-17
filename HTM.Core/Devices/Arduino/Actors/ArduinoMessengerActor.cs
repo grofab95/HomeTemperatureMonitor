@@ -7,7 +7,7 @@ using HTM.Infrastructure.Messages.Events;
 
 namespace HTM.Core.Devices.Arduino.Actors;
 
-record RequestData(IActorRef Sender, GetMessageByCommandHtmRequest HtmRequest);
+record RequestData(IActorRef Sender, GetMessageByCommandRequest Request);
 
 public class ArduinoMessengerActor : BaseActor
 {
@@ -23,13 +23,13 @@ public class ArduinoMessengerActor : BaseActor
     {
         _requests = new List<RequestData>();
 
-        Receive<GetMessageByCommandHtmRequest>(request =>
+        Receive<GetMessageByCommandRequest>(request =>
         {
             Logger.Info("{ArduinoMessengerActor} Adding RequestId={RequestId}", nameof(ArduinoMessengerActor), request.RequestId);
             _requests.Add(new RequestData(Sender, request));
         });
 
-        Receive<GetMessageByCommandHtmResponse>(FinishHandleRequest);
+        Receive<GetMessageByCommandResponse>(FinishHandleRequest);
         Receive<TimerElapsedEvent>(_ => StartHandleRequest());
 
         Receive<DeviceConnectionChangedEvent>(e =>
@@ -38,7 +38,7 @@ public class ArduinoMessengerActor : BaseActor
             _isArduinoConnected = e.IsConnected;
         });
         
-        Context.System.EventStream.Subscribe<GetMessageByCommandHtmRequest>(Self);
+        Context.System.EventStream.Subscribe<GetMessageByCommandRequest>(Self);
         Context.System.EventStream.Subscribe<DeviceConnectionChangedEvent>(Self);
         
         Context.System.Scheduler.ScheduleTellRepeatedly(TimeSpan.Zero, _timerDelay, Self, TimerElapsedEvent.Instance, Self);
@@ -64,27 +64,27 @@ public class ArduinoMessengerActor : BaseActor
         _currentRequestData = _requests.First();
         
         Logger.Info("{StartHandleRequest} | RequestId={RequestId}, Command={Command}", 
-            nameof(StartHandleRequest), _currentRequestData?.HtmRequest.RequestId, _currentRequestData?.HtmRequest.Command);
+            nameof(StartHandleRequest), _currentRequestData?.Request.RequestId, _currentRequestData?.Request.Command);
 
-        Context.ActorOf(Props.Create<GetMessageByCommandActor>(_currentRequestData?.HtmRequest), nameof(GetMessageByCommandActor));
+        Context.ActorOf(Props.Create<GetMessageByCommandActor>(_currentRequestData?.Request), nameof(GetMessageByCommandActor));
     }
 
-    private void FinishHandleRequest(GetMessageByCommandHtmResponse htmResponse)
+    private void FinishHandleRequest(GetMessageByCommandResponse response)
     {
-        if (htmResponse.IsError)
+        if (response.IsError)
         {
             Logger.Error("{FinishHandleRequest} | RequestId={RequestId}, Error={Error}", 
-                nameof(FinishHandleRequest), _currentRequestData?.HtmRequest.RequestId, htmResponse.Exception?.Message);
+                nameof(FinishHandleRequest), _currentRequestData?.Request.RequestId, response.Exception?.Message);
         }
         else
         {
             Logger.Info("{FinishHandleRequest} | RequestId={RequestId}, Message={Message}",
-                nameof(FinishHandleRequest), _currentRequestData?.HtmRequest.RequestId, htmResponse.Message);
+                nameof(FinishHandleRequest), _currentRequestData?.Request.RequestId, response.Message);
             
             _requests.Remove(_currentRequestData);
 
         }
         
-        _currentRequestData?.Sender.Tell(htmResponse);
+        _currentRequestData?.Sender.Tell(response);
     }
 }

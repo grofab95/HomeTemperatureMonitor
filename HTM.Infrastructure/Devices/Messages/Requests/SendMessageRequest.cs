@@ -2,11 +2,11 @@
 
 namespace HTM.Infrastructure.Devices.Messages.Requests;
 
-public class SendMessageHtmRequest : HtmRequest
+public class SendMessageRequest : HtmRequest
 {
     public string Message { get; }
 
-    public SendMessageHtmRequest(string message)
+    public SendMessageRequest(string message)
     {
         Message = message;
     }
