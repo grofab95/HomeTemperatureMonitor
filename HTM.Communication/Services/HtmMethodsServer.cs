@@ -6,6 +6,7 @@ using HTM.Infrastructure;
 using HTM.Infrastructure.Akka;
 using HTM.Infrastructure.Devices.Messages.Requests;
 using HTM.Infrastructure.Measurements.Messages.Requests;
+using Serilog;
 
 namespace HTM.Communication.Services;
 
@@ -20,6 +21,8 @@ public class HtmMethodsServer : V1.HTMMethodsService.HTMMethodsServiceBase
     
     public override async Task<GrpcGetDeviceConnectionStateResponse> GetDeviceConnectionState(GrpcGetDeviceConnectionStateRequest request, ServerCallContext context)
     {
+        Log.Information("HtmMethodsServer | GetDeviceConnectionState, Device={Device}", request.DeviceType);
+        
         var response = await _htmActorBridge.RequestHandlerActor
             .Ask<GetDeviceConnectionStateResponse>(
                 new GetDeviceConnectionStateRequest(request.DeviceType.ToDeviceType()));
@@ -32,6 +35,8 @@ public class HtmMethodsServer : V1.HTMMethodsService.HTMMethodsServiceBase
 
     public override async Task<GrpcGetMessageByCommandResponse> GetMessageByCommand(GrpcGetMessageByCommandRequest request, ServerCallContext context)
     {
+        Log.Information("HtmMethodsServer | GetMessageByCommand, Command={Command}", request.Command);
+        
         var response = await _htmActorBridge.RequestHandlerActor
             .Ask<GetMessageByCommandResponse>(
                 new GetMessageByCommandRequest(Enum.Parse<SerialPortCommand>(request.Command)));
@@ -44,6 +49,8 @@ public class HtmMethodsServer : V1.HTMMethodsService.HTMMethodsServiceBase
 
     public override async Task<GrpcGetTemperatureMeasurementsResponse> GrpcGetTemperatureMeasurements(GrpcGetTemperatureMeasurementsRequest request, ServerCallContext context)
     {
+        Log.Information("HtmMethodsServer | GetTemperatureMeasurements");
+        
         var from = request.From.ToDateTime();
         var to = request.To.ToDateTime();
         

@@ -13,6 +13,8 @@ public class HtmMethodsClient
 {
     private readonly GrpcChannel _grpcChannel;
     
+    private DateTime DeadLine => DateTime.UtcNow.AddSeconds(5);
+    
     public HtmMethodsClient()
     {
         _grpcChannel = GrpcChannel.ForAddress("http://localhost:2010");
@@ -26,7 +28,7 @@ public class HtmMethodsClient
             var response = await client.GetDeviceConnectionStateAsync(new GrpcGetDeviceConnectionStateRequest
             {
                 DeviceType = deviceType.ToDeviceType()
-            });
+            }, deadline: DeadLine);
 
             return response.IsConnected;
         }
@@ -39,21 +41,13 @@ public class HtmMethodsClient
     
     public async Task<string> GetMessageByCommand(SerialPortCommand command)
     {
-        try
+        var client = new HTMMethodsService.HTMMethodsServiceClient(_grpcChannel);
+        var response = await client.GetMessageByCommandAsync(new GrpcGetMessageByCommandRequest
         {
-            var client = new HTMMethodsService.HTMMethodsServiceClient(_grpcChannel);
-            var response = await client.GetMessageByCommandAsync(new GrpcGetMessageByCommandRequest
-            {
-                Command = command.ToString()
-            });
+            Command = command.ToString()
+        }, deadline: DeadLine);
 
-            return response.Message;
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, nameof(GetDeviceConnectionStatus));
-            return ex.Message;
-        }
+        return response.Message;
     }
     
     public async Task<TemperatureMeasurement[]> GetTemperaturesMeasurements(DateTime from, DateTime to)
@@ -65,7 +59,7 @@ public class HtmMethodsClient
             {
                 From = Timestamp.FromDateTime(DateTime.SpecifyKind(from, DateTimeKind.Utc)),
                 To = Timestamp.FromDateTime(DateTime.SpecifyKind(to, DateTimeKind.Utc))
-            });
+            }, deadline: DeadLine);
 
             return response.GrpcTemperatureMeasurements.Select(x => x.ToTemperaturesMeasurement()).ToArray();
         }

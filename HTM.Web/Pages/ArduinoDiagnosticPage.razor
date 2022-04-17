@@ -1,0 +1,32 @@
+@page "/"
+
+<h1>Arduino Diagnostic</h1>
+
+<RadzenCard class="mb-4">
+    <h2>Status: <span style="@(_isConnected ? "color: forestgreen" : "color: red")">@(_isConnected ? "online" : "offline")</span></h2>
+</RadzenCard>
+
+@if (_isConnected)
+{
+    <RadzenCard class="mb-4">
+        <div class="row" style="flex-direction: row">
+            <div class="col">
+                <RadzenButton Disabled="@_isLedOn" ButtonStyle="ButtonStyle.Success" Click="SwitchLed" class="me-2">Led ON</RadzenButton>
+                <RadzenButton Disabled="@(!_isLedOn)" ButtonStyle="ButtonStyle.Danger" Click="SwitchLed">Led OFF</RadzenButton>
+            </div>
+
+            <div class="col text-right">
+                <h2>Led is <span style="@(_isLedOn ? "color: forestgreen" : "color: red")">@(_isLedOn ? "on" : "off")</span></h2>
+            </div>
+        </div>
+    </RadzenCard>
+}
+
+@if (!string.IsNullOrWhiteSpace(_errorMessage))
+{
+   <RadzenCard class="mb-4">
+       <h3>Error occurred: <span style="color: red">@_errorMessage</span></h3>
+   </RadzenCard> 
+}
+
+<PleaseWaitComponent @ref="@_pleaseWaitComponent" />
