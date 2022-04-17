@@ -2,11 +2,11 @@
 
 namespace HTM.Infrastructure.Devices.Messages.Requests;
 
-public class GetMessageByCommandRequest : RequestBase
+public class GetMessageByCommandHtmRequest : HtmRequest
 {
     public SerialPortCommand Command { get; }
     
-    public GetMessageByCommandRequest(SerialPortCommand command)
+    public GetMessageByCommandHtmRequest(SerialPortCommand command)
     {
         Command = command;
     }

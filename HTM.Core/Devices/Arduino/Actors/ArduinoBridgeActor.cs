@@ -29,7 +29,7 @@ public class ArduinoBridgeActor : BaseActor
             result => Logger.Error("ArduinoBridgeActor | Device initialization Error={Error}", result.Exception.Message),
             result => result.IsError);
 
-        Receive<SendMessageRequest>(SendMessage);
+        Receive<SendMessageHtmRequest>(SendMessage);
     }
 
     protected override void PreStart()
@@ -47,22 +47,22 @@ public class ArduinoBridgeActor : BaseActor
         _serialPortDevice?.Dispose();
     }
 
-    private void SendMessage(SendMessageRequest request)
+    private void SendMessage(SendMessageHtmRequest htmRequest)
     {
-        SendMessageResponse response;
+        SendMessageHtmResponse htmResponse;
         
         try
         {
-            _serialPortDevice.SendMessage(request.Message);
+            _serialPortDevice.SendMessage(htmRequest.Message);
 
-            response = new SendMessageResponse(request.RequestId);
+            htmResponse = new SendMessageHtmResponse(htmRequest.RequestId);
         }
         catch (Exception ex)
         {
-            response = new SendMessageResponse(request.RequestId, ex);
+            htmResponse = new SendMessageHtmResponse(htmRequest.RequestId, ex);
         }
         
-        Sender.Tell(response);
+        Sender.Tell(htmResponse);
     }
 
     private void NotifyArduinoConnectionChanged(object sender, bool isConnected)

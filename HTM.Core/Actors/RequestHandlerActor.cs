@@ -1,49 +1,37 @@
 ﻿using Akka.Actor;
 using HTM.Infrastructure.Akka;
-using HTM.Infrastructure.Devices.Messages.Requests;
-using HTM.Infrastructure.Measurements.Messages.Requests;
+using HTM.Infrastructure.MessagesBase;
 
 namespace HTM.Core.Actors;
 
-// todo: refactoring
 public class RequestHandlerActor : BaseActor
 {
-    private IActorRef _sender; // todo: create query actor
-    
+    private readonly Dictionary<Guid, IActorRef> _messageIdToActor = new();
+
     public RequestHandlerActor()
     {
-        Receive<GetDeviceConnectionStateRequest>(r =>
-        {
-            _sender = Sender;
-            Context.System.EventStream.Publish(r);
-        });
+        Receive<HtmRequest>(SaveRequestSenderAndPublishToEventStream);
+        Receive<HtmResponse>(SendResponseToSenderAndRemoveFromDictionary);
+    }
 
-        Receive<GetDeviceConnectionStateResponse>(res =>
-        {
-            
-            _sender.Tell(res);
-        });
+    private void SaveRequestSenderAndPublishToEventStream<T>(T request) where T : HtmRequest
+    {
+        Logger.Info("SaveRequestSenderAndPublishToEventStream | RequestId={RequestId}", request.RequestId);
         
-        Receive<GetMessageByCommandRequest>(r =>
-        {
-            _sender = Sender;
-            Context.System.EventStream.Publish(r);
-        });
-
-        Receive<GetMessageByCommandResponse>(res =>
-        {
-            _sender.Tell(res);
-        });
+        _messageIdToActor.Add(request.RequestId, Sender);
         
-        Receive<GetTemperatureMeasurementsByDateRangeRequest>(r =>
-        {
-            _sender = Sender;
-            Context.System.EventStream.Publish(r);
-        });
+        Context.System.EventStream.Publish(request);
+    }
 
-        Receive<GetTemperatureMeasurementsByDateRangeResponse>(res =>
+    private void SendResponseToSenderAndRemoveFromDictionary<T>(T response) where T : HtmResponse
+    {
+        if (!_messageIdToActor.ContainsKey(response.RequestId))
         {
-            _sender.Tell(res);
-        });
+            Logger.Error("SendResponseToSenderAndRemoveFromDictionary | Sender not recognized, RequestId={RequestId}", response.RequestId);
+            return;
+        } 
+        
+        _messageIdToActor[response.RequestId].Tell(response);
+        _messageIdToActor.Remove(response.RequestId);
     }
 }

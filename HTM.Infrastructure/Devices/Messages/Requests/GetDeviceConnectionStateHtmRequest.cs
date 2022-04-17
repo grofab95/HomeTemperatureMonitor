@@ -1,12 +1,13 @@
 ﻿using HTM.Infrastructure.Devices.Enums;
+using HTM.Infrastructure.MessagesBase;
 
 namespace HTM.Infrastructure.Devices.Messages.Requests;
 
-public class GetDeviceConnectionStateRequest
+public class GetDeviceConnectionStateHtmRequest : HtmRequest
 {
     public DeviceType DeviceType { get; }
     
-    public GetDeviceConnectionStateRequest(DeviceType deviceType)
+    public GetDeviceConnectionStateHtmRequest(DeviceType deviceType)
     {
         DeviceType = deviceType;
     }

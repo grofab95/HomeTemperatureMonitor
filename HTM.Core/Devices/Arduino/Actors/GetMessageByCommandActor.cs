@@ -10,20 +10,20 @@ namespace HTM.Core.Devices.Arduino.Actors;
 
 public class GetMessageByCommandActor : BaseActor
 {
-    private readonly GetMessageByCommandRequest _request;
+    private readonly GetMessageByCommandHtmRequest _htmRequest;
     private const int TimeoutInSec = 5;
 
     private readonly ICancelable _cancelable;
 
-    public GetMessageByCommandActor(GetMessageByCommandRequest request)
+    public GetMessageByCommandActor(GetMessageByCommandHtmRequest htmRequest)
     {
-        _request = request;
-        Context.System.EventStream.Publish(new SendMessageRequest(request.Command.ToString()));
+        _htmRequest = htmRequest;
+        Context.System.EventStream.Publish(new SendMessageHtmRequest(htmRequest.Command.ToString()));
         _cancelable = Context.System.Scheduler.ScheduleTellOnceCancelable(TimeSpan.FromSeconds(TimeoutInSec), Self, TimeoutEvent.Instance, Self);
 
         Receive<TimeoutEvent>(_ => SendMessageToParent(new TimeoutException($"Timeout after {TimeoutInSec} s.")));
 
-        Receive<SendMessageResponse>(response =>
+        Receive<SendMessageHtmResponse>(response =>
         {
             if (response.IsError)
             {
@@ -36,14 +36,14 @@ public class GetMessageByCommandActor : BaseActor
         Context.System.EventStream.Subscribe<MessageReceivedEvent>(Self);
     }
 
-    private void SendMessageToParent(string message) => SendMessageToParent(new GetMessageByCommandResponse(_request.RequestId, message));
-    private void SendMessageToParent(Exception exception) => SendMessageToParent(new GetMessageByCommandResponse(_request.RequestId, exception));
+    private void SendMessageToParent(string message) => SendMessageToParent(new GetMessageByCommandHtmResponse(_htmRequest.RequestId, message));
+    private void SendMessageToParent(Exception exception) => SendMessageToParent(new GetMessageByCommandHtmResponse(_htmRequest.RequestId, exception));
     
-    private void SendMessageToParent(GetMessageByCommandResponse response)
+    private void SendMessageToParent(GetMessageByCommandHtmResponse htmResponse)
     {
         Context.System.EventStream.Unsubscribe<MessageReceivedEvent>(Self);
         _cancelable.Cancel();
-        Context.Parent.Tell(response);
+        Context.Parent.Tell(htmResponse);
         
         StopSelf();
     }

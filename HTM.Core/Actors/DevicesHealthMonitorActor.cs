@@ -17,14 +17,14 @@ public class DevicesHealthMonitorActor : BaseActor
     public DevicesHealthMonitorActor()
     {
         Receive<DeviceConnectionChangedEvent>(OnDeviceConnectionChanged);
-        Receive<GetDeviceConnectionStateRequest>(request =>
+        Receive<GetDeviceConnectionStateHtmRequest>(request =>
         {
             var isConnected = _devicesConnectionsState[request.DeviceType];
-            Sender.Tell(new GetDeviceConnectionStateResponse(isConnected));
+            Sender.Tell(new GetDeviceConnectionStateResponse(request.RequestId, isConnected));
         });
 
         Context.System.EventStream.Subscribe<DeviceConnectionChangedEvent>(Self);
-        Context.System.EventStream.Subscribe<GetDeviceConnectionStateRequest>(Self);
+        Context.System.EventStream.Subscribe<GetDeviceConnectionStateHtmRequest>(Self);
     }
 
     private void OnDeviceConnectionChanged(DeviceConnectionChangedEvent @event)

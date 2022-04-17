@@ -1,14 +1,16 @@
-﻿namespace HTM.Infrastructure.Measurements.Messages.Requests;
+﻿using HTM.Infrastructure.MessagesBase;
 
-public class AddTemperatureMeasurementResponse
+namespace HTM.Infrastructure.Measurements.Messages.Requests;
+
+public class AddTemperatureMeasurementResponse : HtmResponse
 {
-    public static AddTemperatureMeasurementResponse WithSuccess() => new();
-    public static AddTemperatureMeasurementResponse WithFailure(Exception exception) => new(exception);
+    public static AddTemperatureMeasurementResponse WithSuccess(Guid requestId) => new(requestId);
+    public static AddTemperatureMeasurementResponse WithFailure(Guid requestId, Exception exception) => new(requestId, exception);
     
     public Exception Exception { get; }
     public bool IsError => Exception != null;
 
-    public AddTemperatureMeasurementResponse(Exception exception = null)
+    public AddTemperatureMeasurementResponse(Guid requestId, Exception exception = null) : base(requestId)
     {
         Exception = exception;
     }

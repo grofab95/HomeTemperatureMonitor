@@ -1,10 +1,12 @@
-﻿namespace HTM.Infrastructure.Devices.Messages.Requests;
+﻿using HTM.Infrastructure.MessagesBase;
 
-public class GetDeviceConnectionStateResponse
+namespace HTM.Infrastructure.Devices.Messages.Requests;
+
+public class GetDeviceConnectionStateResponse : HtmResponse
 {
     public bool IsConnected { get; }
 
-    public GetDeviceConnectionStateResponse(bool isConnected)
+    public GetDeviceConnectionStateResponse(Guid requestId, bool isConnected) : base(requestId)
     {
         IsConnected = isConnected;
     }

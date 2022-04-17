@@ -1,23 +1,24 @@
-﻿using HTM.Infrastructure.Models;
+﻿using HTM.Infrastructure.MessagesBase;
+using HTM.Infrastructure.Models;
 
 namespace HTM.Infrastructure.Measurements.Messages.Requests;
 
-public class GetLastTemperatureMeasurementResponse
+public class GetLastTemperatureMeasurementResponse : HtmResponse
 {
-    public static GetLastTemperatureMeasurementResponse WithSuccess(TemperatureMeasurement measurement) => new(measurement);
-    public static GetLastTemperatureMeasurementResponse WithFailure(Exception exception) => new(exception);
+    public static GetLastTemperatureMeasurementResponse WithSuccess(Guid requestId, TemperatureMeasurement measurement) => new(requestId, measurement);
+    public static GetLastTemperatureMeasurementResponse WithFailure(Guid requestId, Exception exception) => new(requestId, exception);
     
     public TemperatureMeasurement TemperatureMeasurement { get; }
     public Exception Exception { get; }
     
     public bool IsError => Exception != null;
 
-    public GetLastTemperatureMeasurementResponse(TemperatureMeasurement measurement)
+    public GetLastTemperatureMeasurementResponse(Guid requestId, TemperatureMeasurement measurement) : base(requestId)
     {
         TemperatureMeasurement = measurement;
     }
     
-    public GetLastTemperatureMeasurementResponse(Exception exception)
+    public GetLastTemperatureMeasurementResponse(Guid requestId, Exception exception) : base(requestId)
     {
         Exception = exception;
     }

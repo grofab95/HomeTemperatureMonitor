@@ -22,7 +22,7 @@ public class HtmMethodsServer : V1.HTMMethodsService.HTMMethodsServiceBase
     {
         var response = await _htmActorBridge.RequestHandlerActor
             .Ask<GetDeviceConnectionStateResponse>(
-                new GetDeviceConnectionStateRequest(request.DeviceType.ToDeviceType()));
+                new GetDeviceConnectionStateHtmRequest(request.DeviceType.ToDeviceType()));
 
         return new GrpcGetDeviceConnectionStateResponse
         {
@@ -33,8 +33,8 @@ public class HtmMethodsServer : V1.HTMMethodsService.HTMMethodsServiceBase
     public override async Task<GrpcGetMessageByCommandResponse> GetMessageByCommand(GrpcGetMessageByCommandRequest request, ServerCallContext context)
     {
         var response = await _htmActorBridge.RequestHandlerActor
-            .Ask<GetMessageByCommandResponse>(
-                new GetMessageByCommandRequest(Enum.Parse<SerialPortCommand>(request.Command)));
+            .Ask<GetMessageByCommandHtmResponse>(
+                new GetMessageByCommandHtmRequest(Enum.Parse<SerialPortCommand>(request.Command)));
 
         return new GrpcGetMessageByCommandResponse
         {
@@ -49,7 +49,7 @@ public class HtmMethodsServer : V1.HTMMethodsService.HTMMethodsServiceBase
         
         var response = await _htmActorBridge.RequestHandlerActor
             .Ask<GetTemperatureMeasurementsByDateRangeResponse>(
-                new GetTemperatureMeasurementsByDateRangeRequest(from, to));
+                new GetTemperatureMeasurementsByDateRangeHtmRequest(from, to));
 
         var grpcResponse = new GrpcGetTemperatureMeasurementsResponse();
         grpcResponse.GrpcTemperatureMeasurements.AddRange(

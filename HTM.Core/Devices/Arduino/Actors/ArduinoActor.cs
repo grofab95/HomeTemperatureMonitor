@@ -14,9 +14,9 @@ public class ArduinoActor : BaseActor
     {
         var arduinoBridgeActor = Context.ActorOf(DependencyResolver.For(Context.System).Props<ArduinoBridgeActor>(), nameof(ArduinoBridgeActor));
 
-        Receive<SendMessageRequest>(arduinoBridgeActor.Forward);
+        Receive<SendMessageHtmRequest>(arduinoBridgeActor.Forward);
         Receive<EventBase>(Context.System.EventStream.Publish);
         
-        Context.System.EventStream.Subscribe<SendMessageRequest>(Self);
+        Context.System.EventStream.Subscribe<SendMessageHtmRequest>(Self);
     }
 }

@@ -17,7 +17,7 @@ public class TemperatureMonitorActor : BaseActor
     {
         Receive<TemperatureMeasurementActorInitializedEvent>(_ =>
         {
-            Context.System.EventStream.Publish(new GetLastTemperatureMeasurementRequest());
+            Context.System.EventStream.Publish(new GetLastTemperatureMeasurementHtmRequest());
         });
         
         Receive<GetLastTemperatureMeasurementResponse>(response =>
@@ -28,18 +28,18 @@ public class TemperatureMonitorActor : BaseActor
         
         Receive<TimerElapsedEvent>(_ =>
         {
-            Context.System.EventStream.Publish(new GetMessageByCommandRequest(SerialPortCommand.GetTemperature));
+            Context.System.EventStream.Publish(new GetMessageByCommandHtmRequest(SerialPortCommand.GetTemperature));
         });
 
-        Receive<GetMessageByCommandResponse>(OnGetMessageByCommandResponse);
+        Receive<GetMessageByCommandHtmResponse>(OnGetMessageByCommandResponse);
         Receive<AddTemperatureMeasurementResponse>(r => { });
         
         Context.System.EventStream.Subscribe<GetLastTemperatureMeasurementResponse>(Self);
         Context.System.EventStream.Subscribe<TemperatureMeasurementActorInitializedEvent>(Self);
     }
-    private void OnGetMessageByCommandResponse(GetMessageByCommandResponse response)
+    private void OnGetMessageByCommandResponse(GetMessageByCommandHtmResponse htmResponse)
     {
-        if (response.IsError)
+        if (htmResponse.IsError)
         {
             return;
         }
@@ -49,7 +49,7 @@ public class TemperatureMonitorActor : BaseActor
         //     return; // InvalidTemperatureException
         // }
 
-        var temperature = (float)Math.Round(float.Parse(response.Message ?? "9999", CultureInfo.InvariantCulture), 2);
+        var temperature = (float)Math.Round(float.Parse(htmResponse.Message ?? "9999", CultureInfo.InvariantCulture), 2);
 
         if (temperature == _lastTemperature)
         {
@@ -58,7 +58,7 @@ public class TemperatureMonitorActor : BaseActor
 
         _lastTemperature = temperature;
         
-        Context.System.EventStream.Publish(new AddTemperatureMeasurementRequest(new TemperatureMeasurement
+        Context.System.EventStream.Publish(new AddTemperatureMeasurementHtmRequest(new TemperatureMeasurement
         {
             MeasurementDate = DateTime.Now,
             Temperature = temperature

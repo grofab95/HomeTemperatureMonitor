@@ -15,18 +15,18 @@ public class TemperatureMeasurementActor : BaseActor
     {
         _temperatureMeasurementDao = temperatureMeasurementDao;
 
-        Receive<AddTemperatureMeasurementRequest>(AddMeasurement);
-        Receive<GetLastTemperatureMeasurementRequest>(GetLastMeasurement);
-        Receive<GetTemperatureMeasurementsByDateRangeRequest>(GetMeasurementsByDateRange);
+        Receive<AddTemperatureMeasurementHtmRequest>(AddMeasurement);
+        Receive<GetLastTemperatureMeasurementHtmRequest>(GetLastMeasurement);
+        Receive<GetTemperatureMeasurementsByDateRangeHtmRequest>(GetMeasurementsByDateRange);
         
-        Context.System.EventStream.Subscribe<AddTemperatureMeasurementRequest>(Self);
-        Context.System.EventStream.Subscribe<GetLastTemperatureMeasurementRequest>(Self);
-        Context.System.EventStream.Subscribe<GetTemperatureMeasurementsByDateRangeRequest>(Self);
+        Context.System.EventStream.Subscribe<AddTemperatureMeasurementHtmRequest>(Self);
+        Context.System.EventStream.Subscribe<GetLastTemperatureMeasurementHtmRequest>(Self);
+        Context.System.EventStream.Subscribe<GetTemperatureMeasurementsByDateRangeHtmRequest>(Self);
         
         Context.System.EventStream.Publish(TemperatureMeasurementActorInitializedEvent.Instance);
     }
     
-    private void AddMeasurement(AddTemperatureMeasurementRequest request)
+    private void AddMeasurement(AddTemperatureMeasurementHtmRequest request)
     {
         Logger.Info("AddMeasurement");
 
@@ -34,11 +34,11 @@ public class TemperatureMeasurementActor : BaseActor
             .PipeTo(
                 Sender, 
                 Self, 
-                AddTemperatureMeasurementResponse.WithSuccess,
-                AddTemperatureMeasurementResponse.WithFailure);
+                () => AddTemperatureMeasurementResponse.WithSuccess(request.RequestId),
+                ex => AddTemperatureMeasurementResponse.WithFailure(request.RequestId, ex));
     }
 
-    private void GetLastMeasurement(GetLastTemperatureMeasurementRequest _)
+    private void GetLastMeasurement(GetLastTemperatureMeasurementHtmRequest request)
     {
         Logger.Info("GetLastMeasurement");
         
@@ -46,11 +46,11 @@ public class TemperatureMeasurementActor : BaseActor
             .PipeTo(
                 Sender, 
                 Self, 
-                GetLastTemperatureMeasurementResponse.WithSuccess,
-                GetLastTemperatureMeasurementResponse.WithFailure);
+                data => GetLastTemperatureMeasurementResponse.WithSuccess(request.RequestId, data),
+                ex => GetLastTemperatureMeasurementResponse.WithFailure(request.RequestId, ex));
     }
 
-    private void GetMeasurementsByDateRange(GetTemperatureMeasurementsByDateRangeRequest request)
+    private void GetMeasurementsByDateRange(GetTemperatureMeasurementsByDateRangeHtmRequest request)
     {
         Logger.Info("GetMeasurementsByDateRange | From={From}, To={To}", request.From, request.To);
         
@@ -58,7 +58,7 @@ public class TemperatureMeasurementActor : BaseActor
             .PipeTo(
                 Sender, 
                 Self, 
-                GetTemperatureMeasurementsByDateRangeResponse.WithSuccess,
-                GetTemperatureMeasurementsByDateRangeResponse.WithFailure);
+                data => GetTemperatureMeasurementsByDateRangeResponse.WithSuccess(request.RequestId, data),
+                ex => GetTemperatureMeasurementsByDateRangeResponse.WithFailure(request.RequestId, ex));
     }
 }

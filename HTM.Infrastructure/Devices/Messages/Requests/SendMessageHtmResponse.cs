@@ -2,15 +2,15 @@
 
 namespace HTM.Infrastructure.Devices.Messages.Requests;
 
-public class SendMessageResponse : ResponseBase
+public class SendMessageHtmResponse : HtmResponse
 {
     public Exception Exception { get; }
     public bool IsError => Exception != null;
 
-    public SendMessageResponse(string requestId) : base(requestId)
+    public SendMessageHtmResponse(Guid requestId) : base(requestId)
     { }
     
-    public SendMessageResponse(string requestId, Exception exception) : base(requestId)
+    public SendMessageHtmResponse(Guid requestId, Exception exception) : base(requestId)
     {
         Exception = exception;
     }
