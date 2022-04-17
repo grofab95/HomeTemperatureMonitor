@@ -1,9 +1,12 @@
-﻿using HTM.Devices.Arduino.Configurations;
+﻿using System;
+using System.IO;
+using HTM.Devices.Arduino.Configurations;
 using HTM.Infrastructure.Devices.Adapters;
 using HTM.Infrastructure.Exceptions;
 using Microsoft.Extensions.Options;
 using Serilog;
 using System.IO.Ports;
+using System.Threading.Tasks;
 
 namespace HTM.Devices.Arduino.Services;
 

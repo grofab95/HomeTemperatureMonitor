@@ -12,7 +12,7 @@ namespace HTM.Core.Services;
 public class AppService : IHostedService
 {
     private readonly IServiceProvider _serviceProvider;
-    private ActorSystem? _actorSystem;
+    private ActorSystem _actorSystem;
 
     public AppService(IServiceProvider serviceProvider)
     {

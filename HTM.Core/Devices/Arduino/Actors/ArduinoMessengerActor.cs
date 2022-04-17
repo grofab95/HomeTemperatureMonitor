@@ -13,15 +13,15 @@ public class ArduinoMessengerActor : BaseActor
 {
     private readonly TimeSpan _timerDelay = TimeSpan.FromMilliseconds(100);
     
-    private readonly List<RequestData?> _requests;
+    private readonly List<RequestData> _requests;
     private bool _isArduinoConnected;
     private DateTime _arduinoConnectedAt;
 
-    private RequestData? _currentRequestData;
+    private RequestData _currentRequestData;
 
     public ArduinoMessengerActor()
     {
-        _requests = new List<RequestData?>();
+        _requests = new List<RequestData>();
 
         Receive<GetMessageByCommandRequest>(request =>
         {

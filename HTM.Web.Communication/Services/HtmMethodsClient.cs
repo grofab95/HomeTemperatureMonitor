@@ -56,7 +56,7 @@ public class HtmMethodsClient
         }
     }
     
-    public async Task<TemperatureMeasurement[]?> GetTemperaturesMeasurements(DateTime from, DateTime to)
+    public async Task<TemperatureMeasurement[]> GetTemperaturesMeasurements(DateTime from, DateTime to)
     {
         try
         {

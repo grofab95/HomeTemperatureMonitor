@@ -1,4 +1,6 @@
-﻿using HTM.Infrastructure;
+﻿using System;
+using System.Threading.Tasks;
+using HTM.Infrastructure;
 using HTM.Infrastructure.Devices.Enums;
 using HTM.Web.Communication.Services;
 using Microsoft.AspNetCore.Components;

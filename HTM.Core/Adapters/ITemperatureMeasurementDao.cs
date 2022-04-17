@@ -5,6 +5,6 @@ namespace HTM.Core.Adapters;
 public interface ITemperatureMeasurementDao
 {
     Task AddMeasurement(TemperatureMeasurement temperatureMeasurement);
-    Task<TemperatureMeasurement?> GetLastMeasurement();
-    Task<TemperatureMeasurement?[]> GetMeasurementsByDateRange(DateTime from, DateTime to);
+    Task<TemperatureMeasurement> GetLastMeasurement();
+    Task<TemperatureMeasurement[]> GetMeasurementsByDateRange(DateTime from, DateTime to);
 }

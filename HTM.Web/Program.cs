@@ -2,6 +2,9 @@ using Grpc.Core;
 using HTM.Communication.V1;
 using HTM.Infrastructure.Logging;
 using HTM.Web.Communication.Services;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Radzen;
 
 SerilogHelper.AddSerilog();

@@ -20,7 +20,7 @@ public class TemperatureMeasurementDao : ITemperatureMeasurementDao
         await _context.SaveChangesAsync();
     }
 
-    public async Task<TemperatureMeasurement?> GetLastMeasurement()
+    public async Task<TemperatureMeasurement> GetLastMeasurement()
     {
         var measurement = await _context.TemperatureMeasurements
             .OrderByDescending(x => x.MeasurementDate)
@@ -29,7 +29,7 @@ public class TemperatureMeasurementDao : ITemperatureMeasurementDao
         return measurement?.ToModel();
     }
 
-    public async Task<TemperatureMeasurement?[]> GetMeasurementsByDateRange(DateTime from, DateTime to)
+    public async Task<TemperatureMeasurement[]> GetMeasurementsByDateRange(DateTime from, DateTime to)
     {
         return await _context.TemperatureMeasurements
             .OrderBy(x => x.MeasurementDate)

@@ -20,7 +20,7 @@ public class CommunicationActor : BaseActor
         Context.System.EventStream.Subscribe<DeviceConnectionChangedEvent>(Self);
     }
 
-    public async Task CallDeviceConnectionChanged(DeviceConnectionChangedEvent @event)
+    private async Task CallDeviceConnectionChanged(DeviceConnectionChangedEvent @event)
     {
         try
         {
@@ -33,7 +33,7 @@ public class CommunicationActor : BaseActor
         }
         catch (Exception ex)
         {
-            //todo:
+            Logger.Error(ex, "CallDeviceConnectionChanged Error");
         }
     }
 }

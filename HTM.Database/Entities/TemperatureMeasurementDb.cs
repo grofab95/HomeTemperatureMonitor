@@ -19,7 +19,7 @@ public class TemperatureMeasurementDb : EntityBase
 
 public static class TemperatureMeasurementExtensions
 {
-    public static TemperatureMeasurement? ToModel(this TemperatureMeasurementDb entity)
+    public static TemperatureMeasurement ToModel(this TemperatureMeasurementDb entity)
     {
         return new TemperatureMeasurement
         {

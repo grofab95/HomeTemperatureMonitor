@@ -1,4 +1,5 @@
-﻿using HTM.Devices.Arduino.Configurations;
+﻿using System.IO;
+using HTM.Devices.Arduino.Configurations;
 using HTM.Devices.Arduino.Services;
 using HTM.Infrastructure.Constants;
 using HTM.Infrastructure.Devices.Adapters;

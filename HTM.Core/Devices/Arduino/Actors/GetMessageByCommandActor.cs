@@ -37,7 +37,7 @@ public class GetMessageByCommandActor : BaseActor
     }
 
     private void SendMessageToParent(string message) => SendMessageToParent(new GetMessageByCommandResponse(_request.RequestId, message));
-    private void SendMessageToParent(Exception? exception) => SendMessageToParent(new GetMessageByCommandResponse(_request.RequestId, exception));
+    private void SendMessageToParent(Exception exception) => SendMessageToParent(new GetMessageByCommandResponse(_request.RequestId, exception));
     
     private void SendMessageToParent(GetMessageByCommandResponse response)
     {
