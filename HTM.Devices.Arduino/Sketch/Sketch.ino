@@ -7,7 +7,7 @@
 
 String message = "";
 char* buf;
-int ledState;
+bool ledState;
 
 OneWire oneWire(ONE_WIRE_BUS); 
 DallasTemperature sensors(&oneWire);
@@ -39,13 +39,20 @@ void loop()
     if(receiveVal == "TurnLedOn")
     {
       digitalWrite(LED_PIN, 1);
+      ledState = true;
       message = "ok";
     }
 
     if(receiveVal == "TurnLedOff")
     {
       digitalWrite(LED_PIN, 0);
+      ledState = false;
       message = "ok";
+    }
+
+    if(receiveVal == "GetLedState")
+    {
+      message = ledState;
     }
   }   
   
