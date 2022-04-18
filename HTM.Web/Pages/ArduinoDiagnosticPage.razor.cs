@@ -77,7 +77,6 @@ public partial class ArduinoDiagnosticPage : IDisposable
 
     private async Task SwitchLed()
     {
-        
         await HandleOperation(async () =>
         {
             var command = _isLedOn ? SerialPortCommand.TurnLedOff : SerialPortCommand.TurnLedOn;
