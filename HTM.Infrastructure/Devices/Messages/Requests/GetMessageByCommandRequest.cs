@@ -1,4 +1,5 @@
 ﻿using HTM.Infrastructure.MessagesBase;
+using HTM.Infrastructure.Models;
 
 namespace HTM.Infrastructure.Devices.Messages.Requests;
 

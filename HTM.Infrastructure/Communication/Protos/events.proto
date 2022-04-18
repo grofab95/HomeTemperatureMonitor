@@ -1,12 +1,14 @@
 ﻿syntax = "proto3";
 
-package HTM.Communication.V1;
+package HTM.Communication.V2;
 
 import "common.proto";
 
 service HTMEventsService {
   rpc DeviceConnectionChanged (GrpcDeviceConnectionChangedRequest) returns (GrpcDeviceConnectionChangedResponse);
+  rpc SerialPortMessagesReceived (GrpcSerialPortMessagesReceivedRequest) returns (GrpcSerialPortMessagesReceivedResponse);
 }
+
 
 message GrpcDeviceConnectionChangedRequest {
   GrpcDeviceType deviceType = 1;
@@ -15,4 +17,17 @@ message GrpcDeviceConnectionChangedRequest {
 
 message GrpcDeviceConnectionChangedResponse {
   string error = 1;
+}
+
+message GrpcSerialPortMessagesReceivedRequest {
+  repeated GrpcSerialPortMessage messages = 1;
+}
+
+message GrpcSerialPortMessagesReceivedResponse {
+  string error = 1;
+}
+
+message GrpcSerialPortMessage {
+  GrpcSerialPortMessageType Type = 1;
+  string Text = 2;
 }

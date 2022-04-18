@@ -1,12 +1,16 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using HTM.Infrastructure;
 using HTM.Infrastructure.Devices.Enums;
+using HTM.Infrastructure.Models;
 using HTM.Web.Communication.Services;
 using HTM.Web.Shared;
 using Microsoft.AspNetCore.Components;
 
 namespace HTM.Web.Pages;
+
+record MessageInfo(DateTime ReceivedAt, SerialPortMessageType Type, string Text);
 
 public partial class ArduinoDiagnosticPage : IDisposable
 {
@@ -17,6 +21,8 @@ public partial class ArduinoDiagnosticPage : IDisposable
     private string _errorMessage;
     private bool _isConnected;
     private bool _isLedOn;
+
+    private readonly List<MessageInfo> _receivedMessages = new();
     
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -28,6 +34,7 @@ public partial class ArduinoDiagnosticPage : IDisposable
         _pleaseWaitComponent.Show();
         
         HtmEventsService.OnDeviceConnectionChangedEvent += OnDeviceConnectionChangedEvent;
+        HtmEventsService.OnSerialPortMessagesReceivedEvent += OnMessagesReceived;
     
         _isConnected = await HtmMethodsClient.GetDeviceConnectionStatus(DeviceType.Arduino);
     
@@ -58,11 +65,12 @@ public partial class ArduinoDiagnosticPage : IDisposable
         });
     }
 
-    private void OnMessage(object sender, string message)
+    private void OnMessagesReceived(object sender, SerialPortMessage[] messages)
     {
         InvokeAsync(() =>
         {
-            _errorMessage = message;
+            _receivedMessages.AddRange(messages.Select(x => new MessageInfo(DateTime.Now, x.Type, x.Text)));
+            
             StateHasChanged();
         });
     }
@@ -95,5 +103,6 @@ public partial class ArduinoDiagnosticPage : IDisposable
     public void Dispose()
     {
         HtmEventsService.OnDeviceConnectionChangedEvent -= OnDeviceConnectionChangedEvent;
+        HtmEventsService.OnSerialPortMessagesReceivedEvent -= OnMessagesReceived;
     }
 }

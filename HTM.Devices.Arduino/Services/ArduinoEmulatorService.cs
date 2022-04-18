@@ -1,15 +1,15 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using HTM.Infrastructure;
 using HTM.Infrastructure.Devices.Adapters;
+using HTM.Infrastructure.Models;
 
 namespace HTM.Devices.Arduino.Services;
 
 public class ArduinoEmulatorService : ISerialPortDevice
 {
     public event EventHandler<bool> ConnectionChanged;
-    public event EventHandler<string> OnMessageReceived;
+    public event EventHandler<SerialPortMessage[]> OnMessagesReceived;
 
     private readonly Random _random = new Random();
 
@@ -37,7 +37,7 @@ public class ArduinoEmulatorService : ISerialPortDevice
             _ => string.Empty
         };
         
-        OnMessageReceived?.Invoke(this, callbackMessage);
+        OnMessagesReceived?.Invoke(this, new SerialPortMessage[] { new SerialPortMessage(SerialPortMessageType.CommandResponse, callbackMessage) });
     }
 
     public void Dispose()

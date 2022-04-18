@@ -1,5 +1,5 @@
 ﻿using Grpc.Core;
-using HTM.Communication.V1;
+using HTM.Communication.V2;
 using HTM.Web.Communication.Extensions;
 using Newtonsoft.Json;
 using Serilog;
@@ -23,6 +23,17 @@ public class HtmEventsServer : HTMEventsService.HTMEventsServiceBase
         _htmEventsInvoker.InvokeDeviceConnectionChangedEvent(request.DeviceType.ToDeviceType(), request.IsConnected);
         
         return Task.FromResult(new GrpcDeviceConnectionChangedResponse());
+    }
+
+    public override Task<GrpcSerialPortMessagesReceivedResponse> SerialPortMessagesReceived(GrpcSerialPortMessagesReceivedRequest request, ServerCallContext context)
+    {
+        Log.Information("{HtmEventsServer} - {SerialPortMessagesReceived} | Request={Request}", 
+            nameof(HtmEventsServer), nameof(SerialPortMessagesReceived), JsonConvert.SerializeObject(request));
+
+        var messages = request.Messages.Select(x => x.ToSerialPortMessage()).ToArray();
+        _htmEventsInvoker.InvokeSerialPortMessagesReceivedEvent(messages);
+        
+        return Task.FromResult(new GrpcSerialPortMessagesReceivedResponse());
     }
 }
 

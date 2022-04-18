@@ -5,6 +5,7 @@ using HTM.Infrastructure.Devices.Enums;
 using HTM.Infrastructure.Devices.Messages;
 using HTM.Infrastructure.Devices.Messages.Events;
 using HTM.Infrastructure.Devices.Messages.Requests;
+using HTM.Infrastructure.Models;
 
 namespace HTM.Core.Devices.Arduino.Actors;
 
@@ -19,7 +20,7 @@ public class ArduinoBridgeActor : BaseActor
         
         _serialPortDevice = serialPortDevice;
         _serialPortDevice.ConnectionChanged += NotifyArduinoConnectionChanged;
-        _serialPortDevice.OnMessageReceived += NotifyArduinoMessageReceived;
+        _serialPortDevice.OnMessagesReceived += NotifyArduinoMessagesReceived;
 
         Receive<InitializationResultMessage>(
             _ => Logger.Info("ArduinoBridgeActor | Device initialization success"),
@@ -70,8 +71,13 @@ public class ArduinoBridgeActor : BaseActor
         _deviceActor.Tell(new DeviceConnectionChangedEvent(DeviceType.Arduino, isConnected));
     }
 
-    private void NotifyArduinoMessageReceived(object sender, string message)
+    private void NotifyArduinoMessagesReceived(object sender, SerialPortMessage[] messages)
     {
-        _deviceActor.Tell(new MessageReceivedEvent(message));
+        foreach (var message in messages)
+        {
+            Logger.Info("NotifyArduinoMessageReceived | Type={Type}, Text={Text}", message.Type, message.Text);
+        }
+        
+        _deviceActor.Tell(new SerialPortMessageReceivedEvent(messages));
     }
 }

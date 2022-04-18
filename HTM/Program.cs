@@ -1,6 +1,6 @@
 ﻿using Grpc.Core;
 using HTM.Communication.Services;
-using HTM.Communication.V1;
+using HTM.Communication.V2;
 using HTM.Core.Services;
 using HTM.Database;
 using HTM.Database.Extensions;

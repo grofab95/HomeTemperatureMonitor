@@ -1,4 +1,4 @@
-﻿namespace HTM.Infrastructure;
+﻿namespace HTM.Infrastructure.Models;
 
 public enum SerialPortCommand
 {

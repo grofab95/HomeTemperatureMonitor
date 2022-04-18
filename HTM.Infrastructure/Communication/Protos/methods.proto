@@ -1,6 +1,6 @@
 ﻿syntax = "proto3";
 
-package HTM.Communication.V1;
+package HTM.Communication.V2;
 
 import "google/protobuf/timestamp.proto";
 import "common.proto";

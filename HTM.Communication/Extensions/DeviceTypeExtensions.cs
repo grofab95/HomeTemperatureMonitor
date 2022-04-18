@@ -1,4 +1,4 @@
-﻿using HTM.Communication.V1;
+﻿using HTM.Communication.V2;
 using HTM.Infrastructure.Devices.Enums;
 
 namespace HTM.Communication.Extensions;

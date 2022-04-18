@@ -1,5 +1,5 @@
 using Google.Protobuf.WellKnownTypes;
-using HTM.Communication.V1;
+using HTM.Communication.V2;
 using HTM.Infrastructure.Models;
 
 namespace HTM.Communication.Extensions;

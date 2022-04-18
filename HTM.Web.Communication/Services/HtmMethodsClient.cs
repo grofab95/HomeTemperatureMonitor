@@ -1,6 +1,6 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using Grpc.Net.Client;
-using HTM.Communication.V1;
+using HTM.Communication.V2;
 using HTM.Infrastructure;
 using HTM.Infrastructure.Devices.Enums;
 using HTM.Infrastructure.Models;

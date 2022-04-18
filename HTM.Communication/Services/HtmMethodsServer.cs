@@ -1,16 +1,16 @@
 ﻿using Akka.Actor;
 using Grpc.Core;
 using HTM.Communication.Extensions;
-using HTM.Communication.V1;
-using HTM.Infrastructure;
+using HTM.Communication.V2;
 using HTM.Infrastructure.Akka;
 using HTM.Infrastructure.Devices.Messages.Requests;
 using HTM.Infrastructure.Measurements.Messages.Requests;
+using HTM.Infrastructure.Models;
 using Serilog;
 
 namespace HTM.Communication.Services;
 
-public class HtmMethodsServer : V1.HTMMethodsService.HTMMethodsServiceBase
+public class HtmMethodsServer : V2.HTMMethodsService.HTMMethodsServiceBase
 {
     private readonly HtmActorBridge _htmActorBridge;
 

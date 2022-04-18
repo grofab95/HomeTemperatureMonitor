@@ -1,5 +1,5 @@
 using Grpc.Core;
-using HTM.Communication.V1;
+using HTM.Communication.V2;
 using HTM.Infrastructure.Logging;
 using HTM.Web.Communication.Services;
 using Microsoft.AspNetCore.Builder;

@@ -1,7 +1,13 @@
 ﻿syntax = "proto3";
 
-package HTM.Communication.V1;
+package HTM.Communication.V2;
 
 enum GrpcDeviceType {
   ARDUINO = 0;
+}
+
+enum GrpcSerialPortMessageType {
+  Undefined = 0;
+  Event = 1;
+  CommandResponse = 2;
 }

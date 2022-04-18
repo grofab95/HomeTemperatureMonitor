@@ -20,6 +20,22 @@
             </div>
         </div>
     </RadzenCard>
+    
+    if (_receivedMessages.Any())
+    {
+        <RadzenCard class="mb-4">
+            <div class="text-right mb-2">
+                <RadzenButton ButtonStyle="ButtonStyle.Warning" Click="@(() => _receivedMessages.Clear())">Clear</RadzenButton>
+            </div>
+            
+            <div class="d-flex flex-column-reverse" style="padding: 10px; overflow: auto; max-height: 250px; background-color: #efefef; font-size: large;">
+                @foreach (var (receivedAt, serialPortMessageType, text) in _receivedMessages.OrderByDescending(x => x.ReceivedAt))
+                {
+                    <p>@($"{receivedAt} | {serialPortMessageType} - {text}")</p>
+                }
+            </div>
+        </RadzenCard> 
+    }
 }
 
 @if (!string.IsNullOrWhiteSpace(_errorMessage))

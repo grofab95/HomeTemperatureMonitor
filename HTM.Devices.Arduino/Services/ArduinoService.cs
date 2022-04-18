@@ -6,13 +6,15 @@ using HTM.Infrastructure.Exceptions;
 using Microsoft.Extensions.Options;
 using Serilog;
 using System.IO.Ports;
+using System.Linq;
 using System.Threading.Tasks;
+using HTM.Infrastructure.Models;
 
 namespace HTM.Devices.Arduino.Services;
 
 public class ArduinoService : ISerialPortDevice
 {
-    public event EventHandler<string> OnMessageReceived;
+    public event EventHandler<SerialPortMessage[]> OnMessagesReceived;
     public event EventHandler<bool> ConnectionChanged;
 
     private const int CheckConnectionHealthDelayInMs = 300;
@@ -71,7 +73,7 @@ public class ArduinoService : ISerialPortDevice
         {
             Log.Error("{ArduinoService} | Access to {Port} is denied", nameof(ArduinoService), _serialPort.PortName);
         }
-        catch (Exception)
+        catch
         {
             // ignored
         }
@@ -79,13 +81,38 @@ public class ArduinoService : ISerialPortDevice
 
     private void OnDataReceived(object sender, SerialDataReceivedEventArgs args)
     {
-        var message = _serialPort.ReadLine();
-        if (string.IsNullOrEmpty(message))
+        var receivedMessage = _serialPort.ReadLine();
+        if (string.IsNullOrEmpty(receivedMessage))
+        {
+            return;
+        }
+
+        var messages = ReadMessage(receivedMessage);
+        if (messages == null)
         {
             return;
         }
         
-        OnMessageReceived?.Invoke(this, message);
+        OnMessagesReceived?.Invoke(this, messages);
+    }
+    
+    private SerialPortMessage[] ReadMessage(string receivedMessage)
+    {
+        try
+        {
+            var messages = receivedMessage.Split('|', StringSplitOptions.RemoveEmptyEntries);
+            return messages
+                .Select(m => m.Split('_'))
+                .Where(x => x.Length == 2)
+                .Select(x => new SerialPortMessage(Enum.Parse<SerialPortMessageType>(x[0].Trim()), x[1].Trim()))
+                .ToArray();
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "{ArduinoService} | ReadMessage", nameof(ArduinoService));
+            
+            return null;
+        }
     }
 
     public void SendMessage(string message)

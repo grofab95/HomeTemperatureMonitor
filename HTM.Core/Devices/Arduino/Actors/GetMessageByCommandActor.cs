@@ -4,6 +4,7 @@ using HTM.Infrastructure.Akka;
 using HTM.Infrastructure.Devices.Messages.Events;
 using HTM.Infrastructure.Devices.Messages.Requests;
 using HTM.Infrastructure.Messages.Events;
+using HTM.Infrastructure.Models;
 
 namespace HTM.Core.Devices.Arduino.Actors;
 
@@ -30,9 +31,18 @@ public class GetMessageByCommandActor : BaseActor
             }
         });
 
-        Receive<MessageReceivedEvent>(e => SendMessageToParent(e.Message));
+        Receive<SerialPortMessageReceivedEvent>(e =>
+        {
+            var message = e.Messages.FirstOrDefault(x => x.Type == SerialPortMessageType.CommandResponse);
+            if (message == null)
+            {
+                return;
+            }
+            
+            SendMessageToParent(message.Text);
+        });
 
-        Context.System.EventStream.Subscribe<MessageReceivedEvent>(Self);
+        Context.System.EventStream.Subscribe<SerialPortMessageReceivedEvent>(Self);
     }
 
     private void SendMessageToParent(string message) => SendMessageToParent(new GetMessageByCommandResponse(_request.RequestId, message));
@@ -40,7 +50,7 @@ public class GetMessageByCommandActor : BaseActor
     
     private void SendMessageToParent(GetMessageByCommandResponse response)
     {
-        Context.System.EventStream.Unsubscribe<MessageReceivedEvent>(Self);
+        Context.System.EventStream.Unsubscribe<SerialPortMessageReceivedEvent>(Self);
         _cancelable.Cancel();
         Context.Parent.Tell(response);
         
